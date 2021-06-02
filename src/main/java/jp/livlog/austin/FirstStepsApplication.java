@@ -32,10 +32,10 @@ public class FirstStepsApplication extends Application {
         final var component = new Component();
 
         // Add a new HTTP server listening on port 8182.
-        component.getServers().add(Protocol.HTTP, 8182);
+        component.getServers().add(Protocol.HTTP, 8080);
 
         // Attach the sample application.
-        component.getDefaultHost().attach("/firstSteps",
+        component.getDefaultHost().attach("/austin",
                 new FirstStepsApplication());
 
         // Start the component.
