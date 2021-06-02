@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE logback>
+<configuration>
+
+  <include resource="org/springframework/boot/logging/logback/defaults.xml" />
+
+  <contextListener class="ch.qos.logback.classic.jul.LevelChangePropagator">
+    <resetJUL>true</resetJUL>
+  </contextListener>
+
+  <property name="FILE_PATH" value="${catalina.base}/logs/" />
+
+  <appender name="FILE"
+    class="ch.qos.logback.core.rolling.RollingFileAppender">
+    <prudent>true</prudent>
+    <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+      <fileNamePattern>${FILE_PATH}austin.%d{yyyy-MM-dd}.log</fileNamePattern>
+      <maxHistory>30</maxHistory>
+    </rollingPolicy>
+
+    <encoder>
+      <pattern>%date{yyyy/MM/dd HH:mm:ss:SSS} %.5level -
+        %logger{0}.%.20method %msg%n</pattern>
+    </encoder>
+  </appender>
+
+  <appender name="STDOUT" class="ch.qos.logback.core.ConsoleAppender">
+    <target>System.out</target>
+    <encoder>
+      <pattern>%clr(%d{yyyy/MM/dd HH:mm:ss:SSS}){faint} %clr(%.5level) -
+        %logger{0}.%.20method %msg%n</pattern>
+    </encoder>
+  </appender>
+
+  <root>
+    <level value="INFO" />
+    <appender-ref ref="FILE" />
+    <appender-ref ref="STDOUT" />
+  </root>
+
+</configuration>

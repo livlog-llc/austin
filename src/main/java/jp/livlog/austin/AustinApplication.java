@@ -6,9 +6,10 @@ import org.restlet.Restlet;
 import org.restlet.data.Protocol;
 import org.restlet.routing.Router;
 
-import jp.livlog.austin.resource.HelloWorldResource;
+import jp.livlog.austin.resource.TwitterCallbackResource;
+import jp.livlog.austin.resource.TwitterOAuthResource;
 
-public class FirstStepsApplication extends Application {
+public class AustinApplication extends Application {
 
     /**
      * Creates a root Restlet that will receive all incoming calls.
@@ -16,11 +17,11 @@ public class FirstStepsApplication extends Application {
     @Override
     public synchronized Restlet createInboundRoot() {
 
-        // Create a router Restlet that routes each call to a new instance of HelloWorldResource.
         final var router = new Router(this.getContext());
 
         // Defines only one route
-        router.attach("/hello", HelloWorldResource.class);
+        router.attach("/twitterOAuth", TwitterOAuthResource.class);
+        router.attach("/twitterCallback", TwitterCallbackResource.class);
 
         return router;
     }
@@ -31,12 +32,12 @@ public class FirstStepsApplication extends Application {
         // Create a new Component.
         final var component = new Component();
 
-        // Add a new HTTP server listening on port 8182.
+        // Add a new HTTP server listening on port 8080.
         component.getServers().add(Protocol.HTTP, 8080);
 
-        // Attach the sample application.
+        // Attach the austin application.
         component.getDefaultHost().attach("/austin",
-                new FirstStepsApplication());
+                new AustinApplication());
 
         // Start the component.
         component.start();
