@@ -1,22 +1,32 @@
 package jp.livlog.austin.resource;
 
-import org.restlet.resource.Get;
-import org.restlet.resource.ServerResource;
+import java.io.IOException;
 
+import org.restlet.data.Reference;
+import org.restlet.representation.EmptyRepresentation;
+import org.restlet.representation.Representation;
+import org.restlet.resource.Get;
+
+import jp.livlog.austin.data.Setting;
+import jp.livlog.austin.share.AbsAustinResource;
 import lombok.extern.slf4j.Slf4j;
 
 /**
  * Resource which has only one representation.
  */
 @Slf4j
-public class OAuthResource extends ServerResource {
+public class OAuthResource extends AbsAustinResource {
 
     @Get
-    public String represent() {
+    public Representation doGet() throws IOException {
 
-        OAuthResource.log.info("ログ出力テスト");
+        Setting setting = getSetting();
 
-        return "hello, world";
+        OAuthResource.log.info(setting.toString());
+
+        // final var id = (String) this.getRequest().getAttributes().get("id");
+        final var newRef = new Reference("https://www.cotogoto.ai/");
+        this.redirectSeeOther(newRef);
+        return new EmptyRepresentation();
     }
-
 }

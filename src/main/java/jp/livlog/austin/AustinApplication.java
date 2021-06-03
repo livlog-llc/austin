@@ -9,6 +9,12 @@ import org.restlet.routing.Router;
 import jp.livlog.austin.resource.CallbackResource;
 import jp.livlog.austin.resource.OAuthResource;
 
+/**
+ * アプリケーションクラス.
+ *
+ * @author H.Aoshima
+ * @version 1.0
+ */
 public class AustinApplication extends Application {
 
     /**
