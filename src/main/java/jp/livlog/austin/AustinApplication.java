@@ -6,8 +6,8 @@ import org.restlet.Restlet;
 import org.restlet.data.Protocol;
 import org.restlet.routing.Router;
 
-import jp.livlog.austin.resource.TwitterCallbackResource;
-import jp.livlog.austin.resource.TwitterOAuthResource;
+import jp.livlog.austin.resource.CallbackResource;
+import jp.livlog.austin.resource.OAuthResource;
 
 public class AustinApplication extends Application {
 
@@ -20,8 +20,8 @@ public class AustinApplication extends Application {
         final var router = new Router(this.getContext());
 
         // Defines only one route
-        router.attach("/twitterOAuth", TwitterOAuthResource.class);
-        router.attach("/twitterCallback", TwitterCallbackResource.class);
+        router.attach("/oauth", OAuthResource.class);
+        router.attach("/callback", CallbackResource.class);
 
         return router;
     }

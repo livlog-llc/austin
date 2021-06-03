@@ -9,12 +9,12 @@ import lombok.extern.slf4j.Slf4j;
  * Resource which has only one representation.
  */
 @Slf4j
-public class TwitterCallbackResource extends ServerResource {
+public class CallbackResource extends ServerResource {
 
     @Get
     public String represent() {
 
-        TwitterCallbackResource.log.info("ログ出力テスト");
+        CallbackResource.log.info("ログ出力テスト");
 
         return "hello, world";
     }

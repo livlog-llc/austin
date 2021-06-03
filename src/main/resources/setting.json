@@ -1,0 +1,26 @@
+{
+  "settting": {
+    "app_name": "アプリ名",
+    "app_key": "アプリキー",
+    "domains": [
+      "aaa.jp",
+      "bbb.com"
+    ],
+    "providers": [
+      {
+        "provider_name": "twitter",
+        "client_id": "クライアントID",
+        "client_secret": "クライアントシークレット",
+        "scope": "スコープ",
+        "api_version": "バージョン"
+      },
+      {
+        "provider_name": "facebook",
+        "client_id": "クライアントID",
+        "client_secret": "クライアントシークレット",
+        "scope": "スコープ",
+        "api_version": "バージョン"
+      }
+    ]
+  }
+}

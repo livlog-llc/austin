@@ -9,12 +9,12 @@ import lombok.extern.slf4j.Slf4j;
  * Resource which has only one representation.
  */
 @Slf4j
-public class TwitterOAuthResource extends ServerResource {
+public class OAuthResource extends ServerResource {
 
     @Get
     public String represent() {
 
-        TwitterOAuthResource.log.info("ログ出力テスト");
+        OAuthResource.log.info("ログ出力テスト");
 
         return "hello, world";
     }
