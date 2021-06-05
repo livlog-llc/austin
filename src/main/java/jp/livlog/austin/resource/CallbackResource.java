@@ -1,5 +1,8 @@
 package jp.livlog.austin.resource;
 
+import javax.servlet.http.Cookie;
+import javax.servlet.http.HttpServletResponse;
+
 import org.restlet.data.Reference;
 import org.restlet.ext.servlet.ServletUtils;
 import org.restlet.representation.EmptyRepresentation;
@@ -17,35 +20,68 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 public class CallbackResource extends AbsBaseResource {
 
+    /** クッキーの保存期間(秒). */
+    private static final int COOKIE_PRESERVATION_PERIOD = 60; // １分
+
     @Get
-    public Representation represent() throws Exception {
+    public Representation doGet() throws Exception {
 
-        final var setting = this.getSetting();
+        try {
+            final var setting = this.getSetting();
 
-        final var restletRequest = this.getRequest();
-        final var servletRequest = ServletUtils.getRequest(restletRequest);
+            final var restletRequest = this.getRequest();
+            final var servletRequest = ServletUtils.getRequest(restletRequest);
+            final var restletResponse = this.getResponse();
+            final var servletResponse = ServletUtils.getResponse(restletResponse);
 
-        final var attrMap = this.getRequestAttributes();
-        final var provider = (String) attrMap.get("provider");
-        final var appKey = (String) attrMap.get("app_key");
+            final var attrMap = this.getRequestAttributes();
+            final var provider = (String) attrMap.get("provider");
+            final var appKey = (String) attrMap.get("app_key");
 
-        Result result = null;
-        switch (ProviderType.getType(provider)) {
-            case TWITTER:
-                result = this.twitterService.callback(setting, appKey, servletRequest);
-                break;
-            case FACEBOOK:
-                break;
+            Result result = null;
+            switch (ProviderType.getType(provider)) {
+                case TWITTER:
+                    result = this.twitterService.callback(setting, appKey, servletRequest);
+                    break;
+                case FACEBOOK:
+                    break;
+            }
+
+            this.cookieScope("austin-id", result.getId(), servletResponse);
+            this.cookieScope("austin-oauth-token", result.getOauthToken(), servletResponse);
+            this.cookieScope("austin-oauth-token-secret", result.getOauthTokenSecret(), servletResponse);
+
+            var callbackURL = servletRequest.getRequestURL().toString();
+            final var index = callbackURL.indexOf("callback");
+            callbackURL = callbackURL.substring(0, index) + "html/index.html";
+
+            final var newRef = new Reference(callbackURL);
+            this.redirectSeeOther(newRef);
+            return new EmptyRepresentation();
+        } catch (final Exception e) {
+            CallbackResource.log.error(e.getMessage(), e);
+            throw new Exception(e);
         }
-
-        var callbackURL = servletRequest.getRequestURL().toString();
-        final var index = callbackURL.indexOf("callback");
-        callbackURL = callbackURL.substring(0, index) + "html/index.html";
-
-        final var newRef = new Reference(callbackURL);
-        this.redirectSeeOther(newRef);
-        return new EmptyRepresentation();
 
     }
 
+
+    /**
+     * @param name CharSequence
+     * @param value String
+     * @param response HttpServletResponse
+     * @throws Exception 例外
+     */
+    public void cookieScope(CharSequence name, String value, HttpServletResponse response) throws Exception {
+
+        if (name == null) {
+            throw new NullPointerException("The name parameter must not be null.");
+        } else {
+
+            final var cookie = new Cookie(name.toString(), value);
+            cookie.setMaxAge(CallbackResource.COOKIE_PRESERVATION_PERIOD);
+            cookie.setPath("/");
+            response.addCookie(cookie);
+        }
+    }
 }

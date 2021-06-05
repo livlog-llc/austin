@@ -19,28 +19,34 @@ public class OAuthResource extends AbsBaseResource {
     @Get
     public Representation doGet() throws Exception {
 
-        final var setting = this.getSetting();
+        try {
+            final var setting = this.getSetting();
 
-        final var restletRequest = this.getRequest();
-        final var servletRequest = ServletUtils.getRequest(restletRequest);
+            final var restletRequest = this.getRequest();
+            final var servletRequest = ServletUtils.getRequest(restletRequest);
 
-        final var attrMap = this.getRequestAttributes();
-        final var provider = (String) attrMap.get("provider");
-        final var appKey = (String) attrMap.get("app_key");
+            final var attrMap = this.getRequestAttributes();
+            final var provider = (String) attrMap.get("provider");
+            final var appKey = (String) attrMap.get("app_key");
 
-        String uriReference = null;
-        switch (ProviderType.getType(provider)) {
-            case TWITTER:
-                uriReference = this.twitterService.auth(setting, appKey, servletRequest);
-                break;
-            case FACEBOOK:
-                break;
+            String uriReference = null;
+            switch (ProviderType.getType(provider)) {
+                case TWITTER:
+                    uriReference = this.twitterService.auth(setting, appKey, servletRequest);
+                    break;
+                case FACEBOOK:
+                    break;
+            }
+
+            OAuthResource.log.info(uriReference);
+
+            final var newRef = new Reference(uriReference);
+            this.redirectSeeOther(newRef);
+            return new EmptyRepresentation();
+        } catch (final Exception e) {
+            OAuthResource.log.error(e.getMessage(), e);
+            throw new Exception(e);
         }
 
-        OAuthResource.log.info(uriReference);
-
-        final var newRef = new Reference(uriReference);
-        this.redirectSeeOther(newRef);
-        return new EmptyRepresentation();
     }
 }
