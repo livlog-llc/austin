@@ -4,6 +4,7 @@ import org.restlet.Application;
 import org.restlet.Component;
 import org.restlet.Restlet;
 import org.restlet.data.Protocol;
+import org.restlet.resource.Directory;
 import org.restlet.routing.Router;
 
 import jp.livlog.austin.resource.CallbackResource;
@@ -25,7 +26,8 @@ public class AustinApplication extends Application {
 
         final var router = new Router(this.getContext());
 
-        // Defines only one route
+        final var dir = new Directory(this.getContext(), "war:///");
+        router.attach("/html", dir);
         router.attach("/oauth/{provider}/{app_key}", OAuthResource.class);
         router.attach("/callback/{provider}/{app_key}", CallbackResource.class);
 

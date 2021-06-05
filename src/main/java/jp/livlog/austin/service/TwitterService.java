@@ -3,11 +3,16 @@ package jp.livlog.austin.service;
 import javax.servlet.http.HttpServletRequest;
 
 import jp.livlog.austin.data.Provider;
+import jp.livlog.austin.data.Result;
 import jp.livlog.austin.data.Setting;
 import jp.livlog.austin.share.InfBaseService;
 import jp.livlog.austin.share.ProviderType;
 import lombok.extern.slf4j.Slf4j;
+import twitter4j.Twitter;
+import twitter4j.TwitterException;
 import twitter4j.TwitterFactory;
+import twitter4j.auth.AccessToken;
+import twitter4j.auth.RequestToken;
 import twitter4j.conf.ConfigurationBuilder;
 
 /**
@@ -73,56 +78,32 @@ public class TwitterService implements InfBaseService {
 
 
     @Override
-    public String callback(Setting setting, String appKey) {
+    public Result callback(Setting setting, String appKey, HttpServletRequest request) throws Exception {
 
-        // val twitter = this.getSessionAttribute(SessionAttributeKey.TWITTER_INSTANCE) as Twitter
-        // val requestToken = this.getSessionAttribute(SessionAttributeKey.TWITTER_TOKEN) as RequestToken
-        //
-        // var callbackURL = request.getRequestURL()
-        // val index = callbackURL.lastIndexOf("/")
-        // callbackURL.replace(index, callbackURL.length, "").append("/callback")
-        //
-        // // アクセストークンの取得
-        // val accessToken = twitter.getOAuthAccessToken(requestToken, oauthVerifier)
-        //
-        // val twitterId = accessToken.getUserId()
-        // val twitterToken = accessToken.getToken()
-        // val twitterTokenSecret = accessToken.getTokenSecret()
-        //
-        //
-        // val settingFlg = this.removeSessionAttribute(SessionAttributeKey.SETTING_FLG) as Boolean?
-        // if (settingFlg != null && settingFlg) {
-        // val redirectUrl = this.removeSessionAttribute(SessionAttributeKey.REDIRECT_URL)
-        // // ログインチェック
-        // this.loginCheck(model)
-        //
-        // val check = this.loginAuthService.userService.findByTwitterId(twitterId.toString())
-        // if (check != null) {
-        // this.setRedirectNotification(
-        // redirectAttributes,
-        // NotificationCode.NOTICE_ERROR,
-        // "TwitterAuthController.twitterCallback.error"
-        // )
-        // return "redirect:" + redirectUrl
-        // }
-        //
-        // val userDto = requireNotNull(this.userInfo)
-        // userDto.twitterId = twitterId.toString()
-        // this.loginAuthService.userService.update(userDto)
-        // val userDto2 = this.loginAuthService.userService.findById(requireNotNull(userDto.id))
-        //
-        // this.setSessionAttribute(SessionAttributeKey.LOGIN_SESSION, requireNotNull(userDto2))
-        //
-        // return "redirect:" + redirectUrl
-        // }
-        //
-        // // セッションにIDとトークンを設定
-        // this.setSessionAttribute(SessionAttributeKey.USER_ID, "twitter|" + twitterId)
-        // this.setSessionAttribute(SessionAttributeKey.USER_SNS_TOKEN, twitterToken + "|" + twitterTokenSecret)
-        //
-        // this.setSessionAttribute(SessionAttributeKey.LOGIN_TYPE, LoginType.TWITTER)
+        final var twitter = (Twitter) request.getSession().getAttribute("twitter");
+        final var requestToken = (RequestToken) request.getSession().getAttribute("requestToken");
+        final var verifier = request.getParameter("oauth_verifier");
 
-        return "redirect:/callback";
+        AccessToken accessToken = null;
+        try {
+            // アクセストークンの取得
+            accessToken = twitter.getOAuthAccessToken(requestToken, verifier);
+            request.getSession().removeAttribute("twitter");
+            request.getSession().removeAttribute("requestToken");
+        } catch (final TwitterException e) {
+            throw new Exception(e);
+        }
+
+        final var result = new Result();
+
+        final var id = accessToken.getUserId();
+        final var oauthToken = accessToken.getToken();
+        final var oauthTokenSecret = accessToken.getTokenSecret();
+        result.setId(String.valueOf(id));
+        result.setOauthToken(oauthToken);
+        result.setOauthTokenSecret(oauthTokenSecret);
+
+        return result;
     }
 
 }

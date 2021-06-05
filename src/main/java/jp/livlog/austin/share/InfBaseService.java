@@ -2,6 +2,7 @@ package jp.livlog.austin.share;
 
 import javax.servlet.http.HttpServletRequest;
 
+import jp.livlog.austin.data.Result;
 import jp.livlog.austin.data.Setting;
 
 /**
@@ -40,7 +41,8 @@ public interface InfBaseService {
      *
      * @param setting 設定
      * @param appKey アプリキー
-     * @return 戻り先URL
+     * @return 結果
+     * @throws Exception 例外
      */
-    String callback(Setting setting, String appKey);
+    Result callback(Setting setting, String appKey, HttpServletRequest request) throws Exception;
 }
