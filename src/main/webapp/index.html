@@ -7,8 +7,10 @@ const cookiesArray = cookies.split(';');
 let result = {};
 for(const c of cookiesArray){
     const cArray = c.split('=');
-    if(cArray[0].trim() == 'austin-id') {
-        result.austinId = cArray[1].trim();
+    if(cArray[0].trim() == 'austin-provider') {
+        result.provider = cArray[1].trim();
+    } else if(cArray[0].trim() == 'austin-id') {
+        result.id = cArray[1].trim();
     } else if(cArray[0].trim() == 'austin-oauth-token') {
         result.oauthToken = cArray[1].trim();
     } else if(cArray[0].trim() == 'austin-oauth-token-secret') {

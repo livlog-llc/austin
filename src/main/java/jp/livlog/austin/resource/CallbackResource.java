@@ -47,6 +47,7 @@ public class CallbackResource extends AbsBaseResource {
                     break;
             }
 
+            this.cookieScope("austin-provider", provider, servletResponse);
             this.cookieScope("austin-id", result.getId(), servletResponse);
             this.cookieScope("austin-oauth-token", result.getOauthToken(), servletResponse);
             this.cookieScope("austin-oauth-token-secret", result.getOauthTokenSecret(), servletResponse);

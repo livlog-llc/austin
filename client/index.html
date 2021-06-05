@@ -77,26 +77,17 @@
     <!-- ▼ jQuery ▼ -->
     <script src="./files/jquery-1.12.4.min.js"></script>  <!-- jQuery 本体 -->
     <script src="./files/common.js"></script>             <!-- サイト内共通 js -->
+    <script src="./austin.js"></script>           
 
     <script>
       $(function(){
         $('#openBtn').click(function(event) {
-          window.open(
-            "http://localhost:8080/austin/oauth/twitter/app_key",
-            "austin",
-            "width=1200, height=600, personalbar=0, toolbar=0, scrollbars=1, resizable=!"
-          );
+          const austin = new Austin("http://localhost:8080", "app_key");
+          austin.popup("twitter", function(data) {
+            console.log(data);
+          });
         });
       });
-
-      addEventListener('message', function(event) {
-        // 受け取ってからの処理
-        // 送られてきたのが確実に「c-brains.co.jp」からである事を確認
-        // if (event.origin != "http://localhost:8080") {
-        //   return;
-        // }
-          console.log(event.data);
-      }, false);
     </script>
     <!-- ▲ jQuery ▲ -->
   </body>
