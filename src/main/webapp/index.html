@@ -1,9 +1,22 @@
 <!DOCTYPE html>
 <html lang="ja">
-  <head>
-  </head>
-  <body>
-    <script>
-    </script>
-  </body>
+<body>
+<script>
+const cookies = document.cookie;
+const cookiesArray = cookies.split(';');
+let result = {};
+for(const c of cookiesArray){
+    const cArray = c.split('=');
+    if(cArray[0].trim() == 'austin-id') {
+        result.austinId = cArray[1].trim();
+    } else if(cArray[0].trim() == 'austin-oauth-token') {
+        result.oauthToken = cArray[1].trim();
+    } else if(cArray[0].trim() == 'austin-oauth-token-secret') {
+        result.oauthTokenSecret = cArray[1].trim();
+    }
+}
+window.opener.postMessage(JSON.stringify(result), "*");
+window.close();
+</script>
+</body>
 </html>

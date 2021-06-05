@@ -57,7 +57,8 @@
       <!-- ▼ main ▼ -->
       <div id="main">
         <div class="inner">
-          - MAIN -
+          <div>- MAIN -</div>
+          <div><button id="openBtn">ボタン</button></div>
         </div>  <!-- /.inner -->
       </div>  <!-- /#main -->
       <!-- ▲ main ▲ -->
@@ -79,8 +80,23 @@
 
     <script>
       $(function(){
-
+        $('#openBtn').click(function(event) {
+          window.open(
+            "http://localhost:8080/austin/oauth/twitter/app_key",
+            "austin",
+            "width=1200, height=600, personalbar=0, toolbar=0, scrollbars=1, resizable=!"
+          );
+        });
       });
+
+      addEventListener('message', function(event) {
+        // 受け取ってからの処理
+        // 送られてきたのが確実に「c-brains.co.jp」からである事を確認
+        // if (event.origin != "http://localhost:8080") {
+        //   return;
+        // }
+          console.log(event.data);
+      }, false);
     </script>
     <!-- ▲ jQuery ▲ -->
   </body>
