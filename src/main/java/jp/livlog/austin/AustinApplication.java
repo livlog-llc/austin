@@ -26,8 +26,8 @@ public class AustinApplication extends Application {
         final var router = new Router(this.getContext());
 
         // Defines only one route
-        router.attach("/oauth", OAuthResource.class);
-        router.attach("/callback", CallbackResource.class);
+        router.attach("/oauth/{provider}/{app_key}", OAuthResource.class);
+        router.attach("/callback/{provider}/{app_key}", CallbackResource.class);
 
         return router;
     }

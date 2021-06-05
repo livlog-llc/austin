@@ -17,14 +17,6 @@ import lombok.Data;
 @Data
 public class Setting {
 
-    @SerializedName ("app_name")
-    @Expose
-    String          appName;
-
-    @SerializedName ("app_key")
-    @Expose
-    String          appKey;
-
     @SerializedName ("domains")
     @Expose
     List <String>   domains   = null;

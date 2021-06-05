@@ -12,14 +12,18 @@ import org.restlet.resource.ServerResource;
 import com.google.gson.Gson;
 
 import jp.livlog.austin.data.Setting;
+import jp.livlog.austin.service.TwitterService;
 
 /**
- * オースティンリソースクラス.
+ * ベース用リソースクラス.
  *
  * @author H.Aoshima
  * @version 1.0
  */
-public abstract class AbsAustinResource extends ServerResource {
+public abstract class AbsBaseResource extends ServerResource {
+
+    /** TwitterService. */
+    protected final TwitterService twitterService = TwitterService.getInstance();
 
     protected Setting getSetting() throws IOException {
 
@@ -45,7 +49,7 @@ public abstract class AbsAustinResource extends ServerResource {
 
     protected String getFile(String path) throws IOException {
 
-        final Reader reader = new InputStreamReader(AbsAustinResource.class.getResourceAsStream(path));
+        final Reader reader = new InputStreamReader(AbsBaseResource.class.getResourceAsStream(path));
 
         return IOUtils.toString(reader);
     }

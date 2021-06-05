@@ -18,6 +18,14 @@ import lombok.Data;
 @Generated ("jsonschema2pojo")
 public class Provider {
 
+    @SerializedName ("app_name")
+    @Expose
+    String appName;
+
+    @SerializedName ("app_key")
+    @Expose
+    String appKey;
+
     @SerializedName ("provider_name")
     @Expose
     String providerName;
