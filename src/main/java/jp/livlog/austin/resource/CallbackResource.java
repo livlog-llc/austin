@@ -54,7 +54,7 @@ public class CallbackResource extends AbsBaseResource {
 
             var callbackURL = servletRequest.getRequestURL().toString();
             final var index = callbackURL.indexOf("callback");
-            callbackURL = callbackURL.substring(0, index) + "html/index.html";
+            callbackURL = callbackURL.substring(0, index) + "html/result.html";
 
             final var newRef = new Reference(callbackURL);
             this.redirectSeeOther(newRef);
