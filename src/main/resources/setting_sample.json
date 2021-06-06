@@ -1,0 +1,27 @@
+{
+  "domains": [
+    "127.0.0.1:5500",
+    "rojine.co",
+    "tabi2.lol"
+  ],
+  "providers": [
+    {
+      "app_name": "<-app_name->",
+      "app_key": "<-app_key->",
+      "provider_name": "twitter",
+      "client_id": "<-client_id->",
+      "client_secret": "<-client_secret->",
+      "scope": "",
+      "apiVersion": ""
+    },
+    {
+      "app_name": "<-app_name->",
+      "app_key": "<-app_key->",
+      "provider_name": "facebook",
+      "client_id": "<-client_id->",
+      "client_secret": "<-client_secret->",
+      "scope": "",
+      "apiVersion": ""
+    }
+  ]
+}
