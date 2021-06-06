@@ -11,8 +11,8 @@
       "provider_name": "twitter",
       "client_id": "<-client_id->",
       "client_secret": "<-client_secret->",
-      "scope": "",
-      "apiVersion": ""
+      "scope": "email,user_posts",
+      "apiVersion": "v4.0"
     },
     {
       "app_name": "<-app_name->",
