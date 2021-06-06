@@ -24,6 +24,7 @@ public class OAuthResource extends AbsBaseResource {
 
             final var restletRequest = this.getRequest();
             final var servletRequest = ServletUtils.getRequest(restletRequest);
+            final var ipAddress = servletRequest.getRemoteAddr();
 
             final var attrMap = this.getRequestAttributes();
             final var provider = (String) attrMap.get("provider");
