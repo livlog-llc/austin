@@ -38,19 +38,26 @@ public class CallbackResource extends AbsBaseResource {
             final var provider = (String) attrMap.get("provider");
             final var appKey = (String) attrMap.get("app_key");
 
-            Result result = null;
-            switch (ProviderType.getType(provider)) {
-                case TWITTER:
-                    result = this.twitterService.callback(setting, appKey, servletRequest);
-                    break;
-                case FACEBOOK:
-                    break;
-            }
+            try {
+                Result result = null;
+                switch (ProviderType.getType(provider)) {
+                    case TWITTER:
+                        result = this.twitterService.callback(setting, appKey, servletRequest);
+                        break;
+                    case FACEBOOK:
+                        break;
+                }
 
-            this.cookieScope("austin-provider", provider, servletResponse);
-            this.cookieScope("austin-id", result.getId(), servletResponse);
-            this.cookieScope("austin-oauth-token", result.getOauthToken(), servletResponse);
-            this.cookieScope("austin-oauth-token-secret", result.getOauthTokenSecret(), servletResponse);
+                this.cookieScope("austin-status", "ok", servletResponse);
+                this.cookieScope("austin-provider", provider, servletResponse);
+                this.cookieScope("austin-id", result.getId(), servletResponse);
+                this.cookieScope("austin-oauth-token", result.getOauthToken(), servletResponse);
+                this.cookieScope("austin-oauth-token-secret", result.getOauthTokenSecret(), servletResponse);
+            } catch (final Exception e) {
+                CallbackResource.log.error(e.getMessage(), e);
+                this.cookieScope("austin-status", "ng", servletResponse);
+                this.cookieScope("austin-error-message", "authentication_failure", servletResponse);
+            }
 
             var callbackURL = servletRequest.getRequestURL().toString();
             final var index = callbackURL.indexOf("callback");
@@ -61,7 +68,7 @@ public class CallbackResource extends AbsBaseResource {
             return new EmptyRepresentation();
         } catch (final Exception e) {
             CallbackResource.log.error(e.getMessage(), e);
-            throw new Exception(e);
+            throw e;
         }
 
     }

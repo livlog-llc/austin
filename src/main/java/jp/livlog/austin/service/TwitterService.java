@@ -9,7 +9,6 @@ import jp.livlog.austin.share.InfBaseService;
 import jp.livlog.austin.share.ProviderType;
 import lombok.extern.slf4j.Slf4j;
 import twitter4j.Twitter;
-import twitter4j.TwitterException;
 import twitter4j.TwitterFactory;
 import twitter4j.auth.AccessToken;
 import twitter4j.auth.RequestToken;
@@ -58,7 +57,9 @@ public class TwitterService implements InfBaseService {
         conf.setOAuthConsumerSecret(twitterProvider.getClientSecret());
         final var twitter = new TwitterFactory(conf.build()).getInstance();
 
-        final var requestToken = twitter.getOAuthRequestToken(this.getCallback(appKey, request));
+        final var callbackURL = this.getCallback(appKey, request);
+        TwitterService.log.info(callbackURL);
+        final var requestToken = twitter.getOAuthRequestToken(callbackURL);
 
         TwitterService.log.info(requestToken.getAuthenticationURL());
         request.getSession().setAttribute("twitter", twitter);
@@ -80,21 +81,16 @@ public class TwitterService implements InfBaseService {
     @Override
     public Result callback(Setting setting, String appKey, HttpServletRequest request) throws Exception {
 
+        final var result = new Result();
+
         final var twitter = (Twitter) request.getSession().getAttribute("twitter");
         final var requestToken = (RequestToken) request.getSession().getAttribute("requestToken");
         final var verifier = request.getParameter("oauth_verifier");
 
-        AccessToken accessToken = null;
-        try {
-            // アクセストークンの取得
-            accessToken = twitter.getOAuthAccessToken(requestToken, verifier);
-            request.getSession().removeAttribute("twitter");
-            request.getSession().removeAttribute("requestToken");
-        } catch (final TwitterException e) {
-            throw new Exception(e);
-        }
-
-        final var result = new Result();
+        // アクセストークンの取得
+        final var accessToken = twitter.getOAuthAccessToken(requestToken, verifier);
+        request.getSession().removeAttribute("twitter");
+        request.getSession().removeAttribute("requestToken");
 
         final var id = accessToken.getUserId();
         final var oauthToken = accessToken.getToken();

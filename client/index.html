@@ -77,12 +77,12 @@
     <!-- ▼ jQuery ▼ -->
     <script src="./files/jquery-1.12.4.min.js"></script>  <!-- jQuery 本体 -->
     <script src="./files/common.js"></script>             <!-- サイト内共通 js -->
-    <script src="http://localhost:8080/austin/app/austin.js"></script>           
+    <script src="https://livlog.xyz/austin/app/austin.js"></script>           
 
     <script>
       $(function(){
         $('#openBtn').click(function(event) {
-          const austin = new Austin("http://localhost:8080", "app_key");
+          const austin = new Austin("https://livlog.xyz", "kqNxNdN4F9aZ");
           austin.popup("twitter", function(data) {
             console.log(data);
           });

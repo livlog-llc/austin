@@ -56,7 +56,7 @@ public class OAuthResource extends AbsBaseResource {
             return new EmptyRepresentation();
         } catch (final Exception e) {
             OAuthResource.log.error(e.getMessage(), e);
-            throw new Exception(e);
+            throw e;
         }
 
     }
