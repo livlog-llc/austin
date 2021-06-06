@@ -5,6 +5,7 @@ import org.restlet.ext.servlet.ServletUtils;
 import org.restlet.representation.EmptyRepresentation;
 import org.restlet.representation.Representation;
 import org.restlet.resource.Get;
+import org.restlet.resource.Status;
 
 import jp.livlog.austin.share.AbsBaseResource;
 import jp.livlog.austin.share.ProviderType;
@@ -24,7 +25,16 @@ public class OAuthResource extends AbsBaseResource {
 
             final var restletRequest = this.getRequest();
             final var servletRequest = ServletUtils.getRequest(restletRequest);
-            final var ipAddress = servletRequest.getRemoteAddr();
+            final var referer = servletRequest.getHeader("REFERER");
+            var domainFlg = true;
+            for (final String domain : setting.getDomains()) {
+                if (referer.contains(domain)) {
+                    domainFlg = false;
+                }
+            }
+            if (domainFlg) {
+                throw new NotspecifiedDomainError("Not the specified domain.");
+            }
 
             final var attrMap = this.getRequestAttributes();
             final var provider = (String) attrMap.get("provider");
@@ -49,5 +59,14 @@ public class OAuthResource extends AbsBaseResource {
             throw new Exception(e);
         }
 
+    }
+
+    @Status (403)
+    public class NotspecifiedDomainError extends Exception {
+
+        public NotspecifiedDomainError(String message) {
+
+            super(message);
+        }
     }
 }

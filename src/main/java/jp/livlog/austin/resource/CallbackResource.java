@@ -33,7 +33,6 @@ public class CallbackResource extends AbsBaseResource {
             final var servletRequest = ServletUtils.getRequest(restletRequest);
             final var restletResponse = this.getResponse();
             final var servletResponse = ServletUtils.getResponse(restletResponse);
-            final var ipAddress = servletRequest.getRemoteAddr();
 
             final var attrMap = this.getRequestAttributes();
             final var provider = (String) attrMap.get("provider");
