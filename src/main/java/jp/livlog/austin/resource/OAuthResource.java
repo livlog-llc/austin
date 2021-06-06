@@ -46,6 +46,7 @@ public class OAuthResource extends AbsBaseResource {
                     uriReference = this.twitterService.auth(setting, appKey, servletRequest);
                     break;
                 case FACEBOOK:
+                    uriReference = this.facebookService.auth(setting, appKey, servletRequest);
                     break;
             }
 

@@ -12,6 +12,7 @@ import org.restlet.resource.ServerResource;
 import com.google.gson.Gson;
 
 import jp.livlog.austin.data.Setting;
+import jp.livlog.austin.service.FacebookService;
 import jp.livlog.austin.service.TwitterService;
 
 /**
@@ -23,22 +24,25 @@ import jp.livlog.austin.service.TwitterService;
 public abstract class AbsBaseResource extends ServerResource {
 
     /** TwitterService. */
-    protected final TwitterService twitterService = TwitterService.getInstance();
+    protected final TwitterService  twitterService  = TwitterService.getInstance();
+
+    /** FacebookService. */
+    protected final FacebookService facebookService = FacebookService.getInstance();
 
     protected Setting getSetting() throws IOException {
 
         final var application = (ServletContext) this.getContext().getAttributes().get(Symbol.SERVLET_CONTEXT);
         if (application == null) {
-            String json = getFile(Symbol.SETTING_PATH);
-            Gson gson = new Gson();
-            Setting model = gson.fromJson(json, Setting.class);
+            final var json = this.getFile(Symbol.SETTING_PATH);
+            final var gson = new Gson();
+            final var model = gson.fromJson(json, Setting.class);
             return model;
         }
 
-        Setting setting = (Setting) application.getAttribute(Symbol.AUSTIN_SETTING);
+        var setting = (Setting) application.getAttribute(Symbol.AUSTIN_SETTING);
         if (setting == null) {
-            String json = getFile(Symbol.SETTING_PATH);
-            Gson gson = new Gson();
+            final var json = this.getFile(Symbol.SETTING_PATH);
+            final var gson = new Gson();
             setting = gson.fromJson(json, Setting.class);
             application.setAttribute(Symbol.AUSTIN_SETTING, setting);
         }

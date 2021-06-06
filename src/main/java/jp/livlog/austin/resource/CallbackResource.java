@@ -45,6 +45,7 @@ public class CallbackResource extends AbsBaseResource {
                         result = this.twitterService.callback(setting, appKey, servletRequest);
                         break;
                     case FACEBOOK:
+                        result = this.facebookService.callback(setting, appKey, servletRequest);
                         break;
                 }
 
