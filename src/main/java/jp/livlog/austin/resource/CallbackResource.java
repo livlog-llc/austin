@@ -47,6 +47,9 @@ public class CallbackResource extends AbsBaseResource {
                     case FACEBOOK:
                         result = this.facebookService.callback(setting, appKey, servletRequest);
                         break;
+                    case LINE:
+                        result = this.lineService.callback(setting, appKey, servletRequest);
+                        break;
                 }
 
                 this.cookieScope("austin-status", "ok", servletResponse);

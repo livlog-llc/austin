@@ -12,6 +12,8 @@ public enum ProviderType {
     TWITTER(1, "twitter"),
     /** Facebook. */
     FACEBOOK(2, "facebook"),
+    /** Facebook. */
+    LINE(3, "line"),
     ;
 
     /** cd. */
@@ -38,7 +40,7 @@ public enum ProviderType {
      */
     public static ProviderType getType(final String name) {
 
-        final ProviderType[] types = ProviderType.values();
+        final var types = ProviderType.values();
         for (final ProviderType type : types) {
             if (type.name.equals(name)) {
                 return type;

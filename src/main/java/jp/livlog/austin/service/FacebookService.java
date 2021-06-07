@@ -8,8 +8,6 @@ import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 
-import org.apache.commons.io.IOUtils;
-
 import com.google.gson.Gson;
 import com.restfb.DefaultFacebookClient;
 import com.restfb.Version;
@@ -124,10 +122,9 @@ public class FacebookService implements InfBaseService {
         String accessToken = null;
         try (var inputStream = connection.getInputStream()) {
             final var r = new InputStreamReader(inputStream, StandardCharsets.UTF_8);
-            final var json = IOUtils.toString(r);
             /// mapperオブジェクトを作成
             final var gson = new Gson();
-            final var map = gson.fromJson(json, Map.class);
+            final var map = gson.fromJson(r, Map.class);
             accessToken = (String) map.get("access_token");
         }
 

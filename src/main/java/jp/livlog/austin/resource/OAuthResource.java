@@ -48,6 +48,9 @@ public class OAuthResource extends AbsBaseResource {
                 case FACEBOOK:
                     uriReference = this.facebookService.auth(setting, appKey, servletRequest);
                     break;
+                case LINE:
+                    uriReference = this.lineService.auth(setting, appKey, servletRequest);
+                    break;
             }
 
             OAuthResource.log.info(uriReference);
