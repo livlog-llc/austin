@@ -118,6 +118,7 @@ public class LineService implements InfBaseService {
         final var checkState = (String) request.getSession().getAttribute("state");
         final var code = request.getParameter("code");
         final var state = request.getParameter("state");
+        request.getSession().removeAttribute("state");
 
         if (!checkState.equals(state)) {
             throw new Exception("Cross-site request forgery.");
