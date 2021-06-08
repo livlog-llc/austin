@@ -21,7 +21,7 @@ https://www.luft.co.jp/cgi/randam.php
 
     <script src="https://livlog.xyz/austin/app/austin.js"></script>
     <script>
-    const austin = new Austin("https://livlog.xyz", "kqNxNdN4F9aZ");
+    const austin = new Austin("<--domain-->", "<-app_key->");
     austin.popup("twitter", function(data) {
         if (data.status == 'ok') {
             console.log(data.provider);
