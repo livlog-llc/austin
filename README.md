@@ -19,7 +19,7 @@ https://www.luft.co.jp/cgi/randam.php
 
 ### Javascriptの設定
 
-    <script src="https://livlog.xyz/austin/app/austin.js"></script>
+    <script src="<--domain-->/austin/app/austin.js"></script>
     <script>
     const austin = new Austin("<--domain-->", "<-app_key->");
     austin.popup("twitter", function(data) {
