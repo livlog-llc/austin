@@ -51,6 +51,9 @@ public class OAuthResource extends AbsBaseResource {
                 case LINE:
                     uriReference = this.lineService.auth(setting, appKey, servletRequest);
                     break;
+                case TRELLO:
+                    uriReference = this.trelloService.auth(setting, appKey, servletRequest);
+                    break;
             }
 
             OAuthResource.log.info(uriReference);

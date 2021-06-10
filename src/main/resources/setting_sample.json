@@ -31,6 +31,15 @@
       "client_secret": "<-client_secret->",
       "scope": "profile openid",
       "apiVersion": ""
+    },
+    {
+      "app_name": "<-app_name->",
+      "app_key": "<-app_key->",
+      "provider_name": "trello",
+      "client_id": "-client_id->",
+      "client_secret": "<-client_secret->",
+      "scope": "read,write",
+      "apiVersion": ""
     }
   ]
 }

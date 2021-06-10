@@ -50,6 +50,9 @@ public class CallbackResource extends AbsBaseResource {
                     case LINE:
                         result = this.lineService.callback(setting, appKey, servletRequest);
                         break;
+                    case TRELLO:
+                        result = this.trelloService.callback(setting, appKey, servletRequest);
+                        break;
                 }
 
                 this.cookieScope("austin-status", "ok", servletResponse);

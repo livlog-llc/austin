@@ -12,8 +12,10 @@ public enum ProviderType {
     TWITTER(1, "twitter"),
     /** Facebook. */
     FACEBOOK(2, "facebook"),
-    /** Facebook. */
+    /** Line. */
     LINE(3, "line"),
+    /** Trello. */
+    TRELLO(4, "trello"),
     ;
 
     /** cd. */

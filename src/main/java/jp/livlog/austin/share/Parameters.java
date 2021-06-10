@@ -131,12 +131,25 @@ public class Parameters implements Serializable {
     @Override
     public final String toString() {
 
+        return this.toQueryString(true);
+    }
+
+
+    /**
+     * @param questF 先頭に?を付与する
+     * @return String
+     */
+    public final String toQueryString(boolean questF) {
+
         final var sb = new StringBuffer();
 
         var first = true;
         for (final Parameter param : this.parameters) {
             if (first) {
-                sb.append("?" + param.getName() + "=" + param.getValue());
+                if (questF) {
+                    sb.append("?");
+                }
+                sb.append(param.getName() + "=" + param.getValue());
                 first = false;
             } else {
                 sb.append("&" + param.getName() + "=" + param.getValue());

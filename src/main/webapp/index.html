@@ -2,6 +2,11 @@
 <html lang="ja">
 <body>
 <script>
+function eraseCookie(name) {
+    var date = new Date();
+    date.setTime(date.getTime() - 86400000);
+    document.cookie = name + "=; expires=" + date.toGMTString() + "; path=/";
+}
 const cookies = document.cookie;
 const cookiesArray = cookies.split(';');
 let result = {};
@@ -20,6 +25,7 @@ for(const c of cookiesArray){
     } else if(cArray[0].trim() == 'austin-error-message') {
         result.errorMessage = cArray[1].trim();
     }
+    eraseCookie(cArray[0].trim());
 }
 window.opener.postMessage(JSON.stringify(result), "*");
 window.close();

@@ -14,6 +14,7 @@ import com.google.gson.Gson;
 import jp.livlog.austin.data.Setting;
 import jp.livlog.austin.service.FacebookService;
 import jp.livlog.austin.service.LineService;
+import jp.livlog.austin.service.TrelloService;
 import jp.livlog.austin.service.TwitterService;
 
 /**
@@ -32,6 +33,9 @@ public abstract class AbsBaseResource extends ServerResource {
 
     /** LineService. */
     protected final LineService     lineService     = LineService.getInstance();
+
+    /** TrelloService. */
+    protected final TrelloService   trelloService   = TrelloService.getInstance();
 
     protected Setting getSetting() throws IOException {
 
