@@ -13,17 +13,36 @@ let result = {};
 for(const c of cookiesArray){
     const cArray = c.split('=');
     if(cArray[0].trim() == 'austin-provider') {
-        result.provider = cArray[1].trim();
+        if (cArray[1].trim().length > 0) {
+            result.provider = cArray[1].trim();
+        }
+        if ("trello" == result.provider) {
+            const hashTabName = document.location.hash;
+            if (hashTabName.indexOf('token=') > -1) {
+                const token = hashTabName.slice(1).split('=')[1];
+                result.oauthToken = token;
+            }
+        }
     } else if(cArray[0].trim() == 'austin-id') {
-        result.id = cArray[1].trim();
+        if (cArray[1].trim().length > 0) {
+            result.id = cArray[1].trim();
+        }
     } else if(cArray[0].trim() == 'austin-oauth-token') {
-        result.oauthToken = cArray[1].trim();
+        if (cArray[1].trim().length > 0) {
+            result.oauthToken = cArray[1].trim();
+        }
     } else if(cArray[0].trim() == 'austin-oauth-token-secret') {
-        result.oauthTokenSecret = cArray[1].trim();
+        if (cArray[1].trim().length > 0) {
+            result.oauthTokenSecret = cArray[1].trim();
+        }
     } else if(cArray[0].trim() == 'austin-status') {
-        result.status = cArray[1].trim();
+        if (cArray[1].trim().length > 0) {
+            result.status = cArray[1].trim();
+        }
     } else if(cArray[0].trim() == 'austin-error-message') {
-        result.errorMessage = cArray[1].trim();
+        if (cArray[1].trim().length > 0) {
+            result.errorMessage = cArray[1].trim();
+        }
     }
     eraseCookie(cArray[0].trim());
 }

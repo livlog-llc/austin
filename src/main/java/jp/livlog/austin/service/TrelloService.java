@@ -2,9 +2,6 @@ package jp.livlog.austin.service;
 
 import javax.servlet.http.HttpServletRequest;
 
-import com.github.scribejava.apis.TrelloApi;
-import com.github.scribejava.core.builder.ServiceBuilder;
-
 import jp.livlog.austin.data.Provider;
 import jp.livlog.austin.data.Result;
 import jp.livlog.austin.data.Setting;
@@ -51,22 +48,20 @@ public class TrelloService implements InfBaseService {
             throw new Exception("Could not get the provider.");
         }
 
-        final var service = new ServiceBuilder(trelloProvider.getClientId())
-                .apiSecret(trelloProvider.getClientSecret())
-                .callback(this.getCallback(appKey, request))
-                .build(TrelloApi.instance());
-
-        final var requestToken = service.getRequestToken();
-
         final var parameters = new Parameters();
+        parameters.addParameter("expiration", "never");
         parameters.addParameter("scope", "read,write");
         parameters.addParameter("response_type", "fragment");
-        parameters.addParameter("expiration", "never");
-        parameters.addParameter("name", trelloProvider.getAppName());
-        final var authorizationUrl = service.getAuthorizationUrl(requestToken) + "&" + parameters.toQueryString(false);
-        TrelloService.log.info(authorizationUrl);
+        parameters.addParameter("name", "CotoGoto");
+        parameters.addParameter("key", trelloProvider.getClientId());
+        parameters.addParameter("return_url", this.getCallback(appKey, request));
 
-        return authorizationUrl;
+        final var url = new StringBuffer("https://trello.com/1/authorize");
+        url.append(parameters.toString());
+
+        TrelloService.log.info(url.toString());
+
+        return url.toString();
     }
 
 
