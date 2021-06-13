@@ -95,10 +95,6 @@ public class TrelloService implements InfBaseService {
             throw new Exception("Could not get the provider.");
         }
 
-        final var oauthToken = request.getParameter("oauth_token");
-
-        result.setOauthToken(oauthToken);
-
         return result;
     }
 
