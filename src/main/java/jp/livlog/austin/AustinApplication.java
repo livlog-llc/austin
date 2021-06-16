@@ -24,7 +24,7 @@ public class AustinApplication extends Application {
 
         final var router = new Router(this.getContext());
 
-        final var dir = new Directory(this.getContext(), "war:///");
+        final var dir = new Directory(this.getContext(), "war:///app");
 
         router.attach("/app", dir);
         router.attach("/oauth/{provider}/{app_key}", OAuthResource.class);
