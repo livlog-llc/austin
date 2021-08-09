@@ -62,10 +62,10 @@ public class TwitterService implements InfBaseService {
         final var requestToken = service.getRequestToken();
 
         TwitterService.log.info(service.getAuthorizationUrl(requestToken));
-        request.getSession().setAttribute("twitter", service);
+        request.getSession().setAttribute("service", service);
         request.getSession().setAttribute("requestToken", requestToken);
 
-        return service.getApi().getAuthorizationUrl(requestToken);
+        return service.getAuthorizationUrl(requestToken);
     }
 
 
@@ -91,13 +91,13 @@ public class TwitterService implements InfBaseService {
 
         final var result = new Result();
 
-        final var service = (OAuth10aService) request.getSession().getAttribute("twitter");
+        final var service = (OAuth10aService) request.getSession().getAttribute("service");
         final var requestToken = (OAuth1RequestToken) request.getSession().getAttribute("requestToken");
         final var oauthVerifier = request.getParameter("oauth_verifier");
 
         // アクセストークンの取得
         final var accessToken = service.getAccessToken(requestToken, oauthVerifier);
-        request.getSession().removeAttribute("twitter");
+        request.getSession().removeAttribute("service");
         request.getSession().removeAttribute("requestToken");
 
         final var twitterClient = new TwitterClient(TwitterCredentials.builder()

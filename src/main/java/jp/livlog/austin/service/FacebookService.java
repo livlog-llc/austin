@@ -1,14 +1,10 @@
 package jp.livlog.austin.service;
 
-import java.io.InputStreamReader;
-import java.net.HttpURLConnection;
-import java.net.URL;
-import java.nio.charset.StandardCharsets;
-import java.util.Map;
-
 import javax.servlet.http.HttpServletRequest;
 
-import com.google.gson.Gson;
+import com.github.scribejava.apis.FacebookApi;
+import com.github.scribejava.core.builder.ServiceBuilder;
+import com.github.scribejava.core.oauth.OAuth20Service;
 import com.restfb.DefaultFacebookClient;
 import com.restfb.Version;
 import com.restfb.types.User;
@@ -17,7 +13,6 @@ import jp.livlog.austin.data.Provider;
 import jp.livlog.austin.data.Result;
 import jp.livlog.austin.data.Setting;
 import jp.livlog.austin.share.InfBaseService;
-import jp.livlog.austin.share.Parameters;
 import jp.livlog.austin.share.ProviderType;
 import lombok.extern.slf4j.Slf4j;
 
@@ -59,17 +54,16 @@ public class FacebookService implements InfBaseService {
             throw new Exception("Could not get the provider.");
         }
 
-        final var parameters = new Parameters();
-        parameters.addParameter("client_id", facebookProvider.getClientId());
-        parameters.addParameter("redirect_uri", this.getCallback(appKey, request));
-        parameters.addParameter("scope", facebookProvider.getScope());
+        final var service = new ServiceBuilder(facebookProvider.getClientId())
+                .apiSecret(facebookProvider.getClientSecret())
+                .callback(this.getCallback(appKey, request))
+                .defaultScope(facebookProvider.getScope())
+                .build(FacebookApi.instance());
 
-        final var url = new StringBuffer("https://www.facebook.com/" + facebookProvider.getApiVersion() + "/dialog/oauth");
-        url.append(parameters.toString());
+        FacebookService.log.info(service.getAuthorizationUrl());
+        request.getSession().setAttribute("service", service);
 
-        FacebookService.log.info(url.toString());
-
-        return url.toString();
+        return service.getAuthorizationUrl();
     }
 
 
@@ -78,9 +72,6 @@ public class FacebookService implements InfBaseService {
 
         var callbackURL = request.getRequestURL().toString();
         callbackURL = callbackURL.replace("oauth", "callback");
-        // if (callbackURL.contains("https")) {
-        // callbackURL = callbackURL.replace("http", "https");
-        // }
 
         return callbackURL;
     }
@@ -103,39 +94,22 @@ public class FacebookService implements InfBaseService {
             throw new Exception("Could not get the provider.");
         }
 
+        final var service = (OAuth20Service) request.getSession().getAttribute("service");
+
         final var code = request.getParameter("code");
 
         // アクセストークンの取得
-        final var parameters = new Parameters();
-        parameters.addParameter("client_id", facebookProvider.getClientId());
-        parameters.addParameter("redirect_uri", this.getCallback(appKey, request));
-        parameters.addParameter("client_secret", facebookProvider.getClientSecret());
-        parameters.addParameter("code", code);
-
-        final var url = new StringBuffer("https://graph.facebook.com/" + facebookProvider.getApiVersion() + "/oauth/access_token");
-        url.append(parameters.toString());
-
-        FacebookService.log.info(url.toString());
-
-        final var connection = (HttpURLConnection) new URL(url.toString()).openConnection();
-
-        String accessToken = null;
-        try (var inputStream = connection.getInputStream()) {
-            final var r = new InputStreamReader(inputStream, StandardCharsets.UTF_8);
-            /// mapperオブジェクトを作成
-            final var gson = new Gson();
-            final var map = gson.fromJson(r, Map.class);
-            accessToken = (String) map.get("access_token");
-        }
+        final var accessToken = service.getAccessToken(code);
+        request.getSession().removeAttribute("service");
 
         // Facebook IDを取得する
-        final var facebookClient = new DefaultFacebookClient(accessToken,
+        final var facebookClient = new DefaultFacebookClient(accessToken.getAccessToken(),
                 Version.getVersionFromString(facebookProvider.getApiVersion()));
         final var user = facebookClient.fetchObject("me", User.class);
         final var id = user.getId();
 
         result.setId(id);
-        result.setOauthToken(accessToken);
+        result.setOauthToken(accessToken.getAccessToken());
 
         return result;
     }
