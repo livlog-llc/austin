@@ -2,16 +2,19 @@ package jp.livlog.austin.service;
 
 import javax.servlet.http.HttpServletRequest;
 
+import com.github.redouane59.twitter.TwitterClient;
+import com.github.redouane59.twitter.signature.TwitterCredentials;
+import com.github.scribejava.apis.TwitterApi;
+import com.github.scribejava.core.builder.ServiceBuilder;
+import com.github.scribejava.core.model.OAuth1RequestToken;
+import com.github.scribejava.core.oauth.OAuth10aService;
+
 import jp.livlog.austin.data.Provider;
 import jp.livlog.austin.data.Result;
 import jp.livlog.austin.data.Setting;
 import jp.livlog.austin.share.InfBaseService;
 import jp.livlog.austin.share.ProviderType;
 import lombok.extern.slf4j.Slf4j;
-import twitter4j.Twitter;
-import twitter4j.TwitterFactory;
-import twitter4j.auth.RequestToken;
-import twitter4j.conf.ConfigurationBuilder;
 
 /**
  * Twitterサービス.
@@ -51,20 +54,18 @@ public class TwitterService implements InfBaseService {
             throw new Exception("Could not get the provider.");
         }
 
-        final var conf = new ConfigurationBuilder();
-        conf.setOAuthConsumerKey(twitterProvider.getClientId());
-        conf.setOAuthConsumerSecret(twitterProvider.getClientSecret());
-        final var twitter = new TwitterFactory(conf.build()).getInstance();
+        final var service = new ServiceBuilder(twitterProvider.getClientId())
+                .apiSecret(twitterProvider.getClientSecret())
+                .callback(this.getCallback(appKey, request))
+                .build(TwitterApi.instance());
 
-        final var callbackURL = this.getCallback(appKey, request);
-        TwitterService.log.info(callbackURL);
-        final var requestToken = twitter.getOAuthRequestToken(callbackURL);
+        final var requestToken = service.getRequestToken();
 
-        TwitterService.log.info(requestToken.getAuthenticationURL());
-        request.getSession().setAttribute("twitter", twitter);
+        TwitterService.log.info(service.getAuthorizationUrl(requestToken));
+        request.getSession().setAttribute("twitter", service);
         request.getSession().setAttribute("requestToken", requestToken);
 
-        return requestToken.getAuthenticationURL();
+        return service.getApi().getAuthorizationUrl(requestToken);
     }
 
 
@@ -80,18 +81,33 @@ public class TwitterService implements InfBaseService {
     @Override
     public Result callback(Setting setting, String appKey, HttpServletRequest request) throws Exception {
 
+        Provider twitterProvider = null;
+        for (final Provider provider : setting.getProviders()) {
+            if (ProviderType.TWITTER.name.equals(provider.getProviderName()) && provider.getAppKey().equals(appKey)) {
+                twitterProvider = provider;
+                break;
+            }
+        }
+
         final var result = new Result();
 
-        final var twitter = (Twitter) request.getSession().getAttribute("twitter");
-        final var requestToken = (RequestToken) request.getSession().getAttribute("requestToken");
-        final var verifier = request.getParameter("oauth_verifier");
+        final var service = (OAuth10aService) request.getSession().getAttribute("twitter");
+        final var requestToken = (OAuth1RequestToken) request.getSession().getAttribute("requestToken");
+        final var oauthVerifier = request.getParameter("oauth_verifier");
 
         // アクセストークンの取得
-        final var accessToken = twitter.getOAuthAccessToken(requestToken, verifier);
+        final var accessToken = service.getAccessToken(requestToken, oauthVerifier);
         request.getSession().removeAttribute("twitter");
         request.getSession().removeAttribute("requestToken");
 
-        final var id = accessToken.getUserId();
+        final var twitterClient = new TwitterClient(TwitterCredentials.builder()
+                .accessToken(accessToken.getToken())
+                .accessTokenSecret(accessToken.getTokenSecret())
+                .apiKey(twitterProvider.getClientId())
+                .apiSecretKey(twitterProvider.getClientSecret())
+                .build());
+
+        final var id = twitterClient.getUserIdFromAccessToken();
         final var oauthToken = accessToken.getToken();
         final var oauthTokenSecret = accessToken.getTokenSecret();
         result.setId(String.valueOf(id));
