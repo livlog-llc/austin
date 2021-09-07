@@ -2,13 +2,13 @@ package jp.livlog.austin.service;
 
 import javax.servlet.http.HttpServletRequest;
 
-import com.github.redouane59.twitter.TwitterClient;
-import com.github.redouane59.twitter.signature.TwitterCredentials;
 import com.github.scribejava.apis.TwitterApi;
 import com.github.scribejava.core.builder.ServiceBuilder;
 import com.github.scribejava.core.model.OAuth1RequestToken;
 import com.github.scribejava.core.oauth.OAuth10aService;
 
+import io.github.redouane59.twitter.TwitterClient;
+import io.github.redouane59.twitter.signature.TwitterCredentials;
 import jp.livlog.austin.data.Provider;
 import jp.livlog.austin.data.Result;
 import jp.livlog.austin.data.Setting;
