@@ -83,15 +83,15 @@ public class TrelloService implements InfBaseService {
 
         final var result = new Result();
 
-        Provider lineProvider = null;
+        Provider trelloProvider = null;
         for (final Provider provider : setting.getProviders()) {
             if (ProviderType.TRELLO.name.equals(provider.getProviderName()) && provider.getAppKey().equals(appKey)) {
-                lineProvider = provider;
+                trelloProvider = provider;
                 break;
             }
         }
 
-        if (lineProvider == null) {
+        if (trelloProvider == null) {
             throw new Exception("Could not get the provider.");
         }
 
