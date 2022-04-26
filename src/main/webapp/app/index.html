@@ -1,5 +1,10 @@
 <!DOCTYPE html>
 <html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+</head>
 <body>
 <script>
 function eraseCookie(name) {
@@ -49,5 +54,7 @@ for(const c of cookiesArray){
 window.opener.postMessage(JSON.stringify(result), "*");
 window.close();
 </script>
+<p>認証が完了しました。</p>
+<p>こちらの画面を閉じてアプリにお戻りください。</p>
 </body>
 </html>
