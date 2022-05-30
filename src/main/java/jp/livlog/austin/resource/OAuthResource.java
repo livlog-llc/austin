@@ -54,6 +54,11 @@ public class OAuthResource extends AbsBaseResource {
                 case TRELLO:
                     uriReference = this.trelloService.auth(setting, appKey, servletRequest);
                     break;
+                case SLACK:
+                    uriReference = this.slackService.auth(setting, appKey, servletRequest);
+                    break;
+                default:
+                    break;
             }
 
             OAuthResource.log.info(uriReference);

@@ -18,4 +18,5 @@ public class Result {
 
     String oauthTokenSecret;
 
+    String other;
 }

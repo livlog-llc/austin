@@ -44,6 +44,10 @@ for(const c of cookiesArray){
         if (cArray[1].trim().length > 0) {
             result.status = cArray[1].trim();
         }
+    } else if(cArray[0].trim() == 'austin-other') {
+        if (cArray[1].trim().length > 0) {
+            result.other = cArray[1].trim();
+        }
     } else if(cArray[0].trim() == 'austin-error-message') {
         if (cArray[1].trim().length > 0) {
             result.errorMessage = cArray[1].trim();

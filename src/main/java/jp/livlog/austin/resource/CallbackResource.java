@@ -53,6 +53,11 @@ public class CallbackResource extends AbsBaseResource {
                     case TRELLO:
                         result = this.trelloService.callback(setting, appKey, servletRequest);
                         break;
+                    case SLACK:
+                        result = this.slackService.callback(setting, appKey, servletRequest);
+                        break;
+                    default:
+                        break;
                 }
 
                 this.cookieScope("austin-status", "ok", servletResponse);
@@ -60,6 +65,7 @@ public class CallbackResource extends AbsBaseResource {
                 this.cookieScope("austin-id", result.getId(), servletResponse);
                 this.cookieScope("austin-oauth-token", result.getOauthToken(), servletResponse);
                 this.cookieScope("austin-oauth-token-secret", result.getOauthTokenSecret(), servletResponse);
+                this.cookieScope("austin-other", result.getOther(), servletResponse);
             } catch (final Exception e) {
                 CallbackResource.log.error(e.getMessage(), e);
                 this.cookieScope("austin-status", "ng", servletResponse);
