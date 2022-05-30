@@ -3,6 +3,7 @@ package jp.livlog.austin.service;
 import javax.servlet.http.HttpServletRequest;
 
 import com.github.scribejava.apis.SlackApi;
+import com.github.scribejava.core.base64.Base64;
 import com.github.scribejava.core.builder.ServiceBuilder;
 import com.github.scribejava.core.oauth.OAuth20Service;
 
@@ -76,13 +77,13 @@ public class SlackService implements InfBaseService {
     @Override
     public Result callback(Setting setting, String appKey, HttpServletRequest request) throws Exception {
 
-        Provider slackProvider = null;
-        for (final Provider provider : setting.getProviders()) {
-            if (ProviderType.SLACK.name.equals(provider.getProviderName()) && provider.getAppKey().equals(appKey)) {
-                slackProvider = provider;
-                break;
-            }
-        }
+        // Provider slackProvider = null;
+        // for (final Provider provider : setting.getProviders()) {
+        // if (ProviderType.SLACK.name.equals(provider.getProviderName()) && provider.getAppKey().equals(appKey)) {
+        // slackProvider = provider;
+        // break;
+        // }
+        // }
 
         final var result = new Result();
 
@@ -94,22 +95,13 @@ public class SlackService implements InfBaseService {
         final var accessToken = service.getAccessToken(code);
         request.getSession().removeAttribute("service");
 
-        String token = accessToken.getAccessToken();
-        String rawResponse = accessToken.getRawResponse();
+        final var oauthToken = accessToken.getAccessToken();
+        final var rawResponse = accessToken.getRawResponse();
 
-        // final var twitterClient = new TwitterClient(TwitterCredentials.builder()
-        // .accessToken(accessToken.getToken())
-        // .accessTokenSecret(accessToken.getTokenSecret())
-        // .apiKey(slackProvider.getClientId())
-        // .apiSecretKey(slackProvider.getClientSecret())
-        // .build());
-        //
-        // final var id = twitterClient.getUserIdFromAccessToken();
-        // final var oauthToken = accessToken.getToken();
-        // final var oauthTokenSecret = accessToken.getTokenSecret();
+        SlackService.log.info(rawResponse);
         // result.setId(String.valueOf(id));
-        // result.setOauthToken(oauthToken);
-        // result.setOauthTokenSecret(oauthTokenSecret);
+        result.setOauthToken(oauthToken);
+        result.setOther(Base64.encode(rawResponse.getBytes()));
 
         return result;
     }
