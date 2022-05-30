@@ -44,10 +44,10 @@
     {
       "app_name": "<-app_name->",
       "app_key": "<-app_key->",
-      "provider_name": "Slack",
+      "provider_name": "slack",
       "client_id": "-client_id->",
       "client_secret": "<-client_secret->",
-      "scope": "read,write",
+      "scope": "users:read",
       "apiVersion": ""
     }
   ]
