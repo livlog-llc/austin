@@ -1,5 +1,7 @@
 package jp.livlog.austin.service;
 
+import java.util.UUID;
+
 import javax.servlet.http.HttpServletRequest;
 
 import com.github.scribejava.apis.SlackApi;
@@ -52,16 +54,21 @@ public class SlackService implements InfBaseService {
             throw new Exception("Could not get the provider.");
         }
 
+        final var state = UUID.randomUUID().toString();
+        request.getSession().setAttribute("state", state);
+
         final var service = new ServiceBuilder(slackProvider.getClientId())
                 .apiSecret(slackProvider.getClientSecret())
                 .callback(this.getCallback(appKey, request))
                 .defaultScope(slackProvider.getScope())
                 .build(SlackApi.instance());
 
-        SlackService.log.info(service.getAuthorizationUrl());
+        var authorizationUrl = service.getAuthorizationUrl() + "&state=" + state;
+
+        SlackService.log.info(authorizationUrl);
         request.getSession().setAttribute("service", service);
 
-        return service.getAuthorizationUrl();
+        return authorizationUrl;
     }
 
 
@@ -89,7 +96,14 @@ public class SlackService implements InfBaseService {
 
         final var service = (OAuth20Service) request.getSession().getAttribute("service");
 
+        final var checkState = (String) request.getSession().getAttribute("state");
         final var code = request.getParameter("code");
+        final var state = request.getParameter("state");
+        request.getSession().removeAttribute("state");
+
+        if (!checkState.equals(state)) {
+            throw new Exception("Cross-site request forgery.");
+        }
 
         // アクセストークンの取得
         final var accessToken = service.getAccessToken(code);
