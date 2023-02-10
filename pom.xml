@@ -147,10 +147,5 @@
             <artifactId>restfb</artifactId>
             <version>2023.2.0</version>
         </dependency>
-        <dependency>
-            <groupId>io.github.redouane59.twitter</groupId>
-            <artifactId>twittered</artifactId>
-            <version>2.21</version>
-        </dependency>
     </dependencies>
 </project>

@@ -7,8 +7,6 @@ import com.github.scribejava.core.builder.ServiceBuilder;
 import com.github.scribejava.core.model.OAuth1RequestToken;
 import com.github.scribejava.core.oauth.OAuth10aService;
 
-import io.github.redouane59.twitter.TwitterClient;
-import io.github.redouane59.twitter.signature.TwitterCredentials;
 import jp.livlog.austin.data.Provider;
 import jp.livlog.austin.data.Result;
 import jp.livlog.austin.data.Setting;
@@ -40,7 +38,7 @@ public class TwitterService implements InfBaseService {
 
 
     @Override
-    public String auth(Setting setting, String appKey, HttpServletRequest request) throws Exception {
+    public String auth(final Setting setting, final String appKey, final HttpServletRequest request) throws Exception {
 
         Provider twitterProvider = null;
         for (final Provider provider : setting.getProviders()) {
@@ -70,7 +68,7 @@ public class TwitterService implements InfBaseService {
 
 
     @Override
-    public String getCallback(String appKey, HttpServletRequest request) {
+    public String getCallback(final String appKey, final HttpServletRequest request) {
 
         final var callbackURL = request.getRequestURL().toString();
 
@@ -79,15 +77,7 @@ public class TwitterService implements InfBaseService {
 
 
     @Override
-    public Result callback(Setting setting, String appKey, HttpServletRequest request) throws Exception {
-
-        Provider twitterProvider = null;
-        for (final Provider provider : setting.getProviders()) {
-            if (ProviderType.TWITTER.name.equals(provider.getProviderName()) && provider.getAppKey().equals(appKey)) {
-                twitterProvider = provider;
-                break;
-            }
-        }
+    public Result callback(final Setting setting, final String appKey, final HttpServletRequest request) throws Exception {
 
         final var result = new Result();
 
@@ -100,21 +90,24 @@ public class TwitterService implements InfBaseService {
         request.getSession().removeAttribute("service");
         request.getSession().removeAttribute("requestToken");
 
-        final var twitterClient = new TwitterClient(TwitterCredentials.builder()
-                .accessToken(accessToken.getToken())
-                .accessTokenSecret(accessToken.getTokenSecret())
-                .apiKey(twitterProvider.getClientId())
-                .apiSecretKey(twitterProvider.getClientSecret())
-                .build());
-
-        final var id = twitterClient.getUserIdFromAccessToken();
         final var oauthToken = accessToken.getToken();
         final var oauthTokenSecret = accessToken.getTokenSecret();
-        result.setId(String.valueOf(id));
+
+        result.setId(this.getUserIdFromAccessToken(oauthToken));
         result.setOauthToken(oauthToken);
         result.setOauthTokenSecret(oauthTokenSecret);
 
         return result;
     }
 
+
+    public String getUserIdFromAccessToken(final String accessToken) {
+
+        if (accessToken == null
+                || accessToken.isEmpty()
+                || !accessToken.contains("-")) {
+            throw new IllegalArgumentException("Access token null, empty or incorrect");
+        }
+        return accessToken.substring(0, accessToken.indexOf("-"));
+    }
 }
