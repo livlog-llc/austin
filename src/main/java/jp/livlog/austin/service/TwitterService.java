@@ -11,11 +11,15 @@ import com.github.scribejava.core.model.OAuth1RequestToken;
 import com.github.scribejava.core.oauth.OAuth10aService;
 import com.github.scribejava.core.pkce.PKCE;
 import com.github.scribejava.core.pkce.PKCECodeChallengeMethod;
+import com.google.gson.Gson;
 import com.twitter.clientlib.auth.TwitterOAuth20Service;
 
 import jp.livlog.austin.data.Provider;
 import jp.livlog.austin.data.Result;
 import jp.livlog.austin.data.Setting;
+import jp.livlog.austin.model.TemporaryModel;
+import jp.livlog.austin.repositories.Sql2oConfig;
+import jp.livlog.austin.repositories.TemporaryRepository;
 import jp.livlog.austin.share.InfBaseService;
 import jp.livlog.austin.share.ProviderType;
 import lombok.extern.slf4j.Slf4j;
@@ -120,6 +124,8 @@ public class TwitterService implements InfBaseService {
 
     private String processOAuth20Auth(final Provider twitterProvider, final String appKey, final HttpServletRequest request) {
 
+        final var key = request.getParameter("key");
+
         final var service = new TwitterOAuth20Service(
                 twitterProvider.getClientId(),
                 twitterProvider.getClientSecret(),
@@ -132,6 +138,7 @@ public class TwitterService implements InfBaseService {
         pkce.setCodeChallengeMethod(PKCECodeChallengeMethod.PLAIN);
         pkce.setCodeVerifier("challenge");
 
+        request.getSession().setAttribute("key", key);
         request.getSession().setAttribute("service", service);
         request.getSession().setAttribute("state", state);
         request.getSession().setAttribute("pkce", pkce);
@@ -169,6 +176,7 @@ public class TwitterService implements InfBaseService {
 
         final var result = new Result();
 
+        final var key = (String) request.getSession().getAttribute("key");
         final var service = (TwitterOAuth20Service) request.getSession().getAttribute("service");
         final var pkce = (PKCE) request.getSession().getAttribute("pkce");
         final var checkState = (String) request.getSession().getAttribute("state");
@@ -192,6 +200,18 @@ public class TwitterService implements InfBaseService {
 
         result.setOauthToken(oauthToken);
         result.setOther(Base64.encode(rawResponse.getBytes()));
+
+        try (var conn = new Sql2oConfig(request.getServletContext()).getSql2o().open()) {
+
+            final var gson = new Gson();
+            final var json = gson.toJson(result);
+
+            final var model = new TemporaryModel();
+            model.setKey(key);
+            model.setValue(json);
+            final var temporaryRepository = new TemporaryRepository(conn);
+            temporaryRepository.insert(model);
+        }
 
         return result;
     }
