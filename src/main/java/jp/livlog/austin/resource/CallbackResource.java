@@ -1,8 +1,5 @@
 package jp.livlog.austin.resource;
 
-import javax.servlet.http.Cookie;
-import javax.servlet.http.HttpServletResponse;
-
 import org.restlet.data.Reference;
 import org.restlet.ext.servlet.ServletUtils;
 import org.restlet.representation.EmptyRepresentation;
@@ -20,9 +17,6 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 public class CallbackResource extends AbsBaseResource {
 
-    /** クッキーの保存期間(秒). */
-    private static final int COOKIE_PRESERVATION_PERIOD = 60; // １分
-
     @Get
     public Representation doGet() throws Exception {
 
@@ -33,6 +27,7 @@ public class CallbackResource extends AbsBaseResource {
             final var servletRequest = ServletUtils.getRequest(restletRequest);
             final var restletResponse = this.getResponse();
             final var servletResponse = ServletUtils.getResponse(restletResponse);
+            restletResponse.setAccessControlAllowOrigin("*");
 
             final var attrMap = this.getRequestAttributes();
             final var provider = (String) attrMap.get("provider");
@@ -74,7 +69,7 @@ public class CallbackResource extends AbsBaseResource {
 
             var callbackURL = servletRequest.getRequestURL().toString();
             final var index = callbackURL.indexOf("callback");
-            callbackURL = callbackURL.substring(0, index) + "app/index.html";
+            callbackURL = callbackURL.substring(0, index) + "app/close.html";
 
             final var newRef = new Reference(callbackURL);
             this.redirectSeeOther(newRef);
@@ -86,23 +81,4 @@ public class CallbackResource extends AbsBaseResource {
 
     }
 
-
-    /**
-     * @param name CharSequence
-     * @param value String
-     * @param response HttpServletResponse
-     * @throws Exception 例外
-     */
-    public void cookieScope(final CharSequence name, final String value, final HttpServletResponse response) throws Exception {
-
-        if (name == null) {
-            throw new NullPointerException("The name parameter must not be null.");
-        } else {
-
-            final var cookie = new Cookie(name.toString(), value);
-            cookie.setMaxAge(CallbackResource.COOKIE_PRESERVATION_PERIOD);
-            cookie.setPath("/");
-            response.addCookie(cookie);
-        }
-    }
 }

@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+</head>
+<body>
+<script>
+function eraseCookie(name) {
+    var date = new Date();
+    date.setTime(date.getTime() - 86400000);
+    document.cookie = name + "=; expires=" + date.toGMTString() + "; path=/";
+}
+const cookies = document.cookie;
+const cookiesArray = cookies.split(';');
+let result = {};
+for(const c of cookiesArray){
+    const cArray = c.split('=');
+    if(cArray[0].trim() == 'austin-provider') {
+        if (cArray[1].trim().length > 0) {
+            result.provider = cArray[1].trim();
+        }
+        if ("trello" == result.provider) {
+            const hashTabName = document.location.hash;
+            if (hashTabName.indexOf('token=') > -1) {
+                const token = hashTabName.slice(1).split('=')[1];
+                result.oauthToken = token;
+            }
+        }
+    } else if(cArray[0].trim() == 'austin-id') {
+        if (cArray[1].trim().length > 0) {
+            result.id = cArray[1].trim();
+        }
+    } else if(cArray[0].trim() == 'austin-oauth-token') {
+        if (cArray[1].trim().length > 0) {
+            result.oauthToken = cArray[1].trim();
+        }
+    } else if(cArray[0].trim() == 'austin-oauth-token-secret') {
+        if (cArray[1].trim().length > 0) {
+            result.oauthTokenSecret = cArray[1].trim();
+        }
+    } else if(cArray[0].trim() == 'austin-status') {
+        if (cArray[1].trim().length > 0) {
+            result.status = cArray[1].trim();
+        }
+    } else if(cArray[0].trim() == 'austin-other') {
+        if (cArray[1].trim().length > 0) {
+            result.other = cArray[1].trim();
+        }
+    } else if(cArray[0].trim() == 'austin-error-message') {
+        if (cArray[1].trim().length > 0) {
+            result.errorMessage = cArray[1].trim();
+        }
+    }
+    eraseCookie(cArray[0].trim());
+}
+window.opener.postMessage(JSON.stringify(result), "*");
+window.close();
+</script>
+<p>認証が完了しました。</p>
+<p>こちらの画面を閉じてアプリにお戻りください。</p>
+</body>
+</html>
