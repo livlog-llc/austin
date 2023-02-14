@@ -5,7 +5,6 @@ import java.util.UUID;
 import javax.servlet.http.HttpServletRequest;
 
 import com.github.scribejava.apis.SlackApi;
-import com.github.scribejava.core.base64.Base64;
 import com.github.scribejava.core.builder.ServiceBuilder;
 import com.github.scribejava.core.oauth.OAuth20Service;
 
@@ -40,7 +39,7 @@ public class SlackService implements InfBaseService {
 
 
     @Override
-    public String auth(Setting setting, String appKey, HttpServletRequest request) throws Exception {
+    public String auth(final Setting setting, final String appKey, final HttpServletRequest request) throws Exception {
 
         Provider slackProvider = null;
         for (final Provider provider : setting.getProviders()) {
@@ -63,7 +62,7 @@ public class SlackService implements InfBaseService {
                 .defaultScope(slackProvider.getScope())
                 .build(SlackApi.instance());
 
-        var authorizationUrl = service.getAuthorizationUrl() + "&state=" + state;
+        final var authorizationUrl = service.getAuthorizationUrl() + "&state=" + state;
 
         SlackService.log.info(authorizationUrl);
         request.getSession().setAttribute("service", service);
@@ -73,7 +72,7 @@ public class SlackService implements InfBaseService {
 
 
     @Override
-    public String getCallback(String appKey, HttpServletRequest request) {
+    public String getCallback(final String appKey, final HttpServletRequest request) {
 
         final var callbackURL = request.getRequestURL().toString();
 
@@ -82,7 +81,7 @@ public class SlackService implements InfBaseService {
 
 
     @Override
-    public Result callback(Setting setting, String appKey, HttpServletRequest request) throws Exception {
+    public Result callback(final Setting setting, final String appKey, final HttpServletRequest request) throws Exception {
 
         // Provider slackProvider = null;
         // for (final Provider provider : setting.getProviders()) {
@@ -115,7 +114,7 @@ public class SlackService implements InfBaseService {
         SlackService.log.info(rawResponse);
         // result.setId(String.valueOf(id));
         result.setOauthToken(oauthToken);
-        result.setOther(Base64.encode(rawResponse.getBytes()));
+        // result.setOther(Base64.encode(rawResponse.getBytes()));
 
         return result;
     }

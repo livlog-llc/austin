@@ -93,7 +93,7 @@ public class CallbackResource extends AbsBaseResource {
      * @param response HttpServletResponse
      * @throws Exception 例外
      */
-    public void cookieScope(CharSequence name, String value, HttpServletResponse response) throws Exception {
+    public void cookieScope(final CharSequence name, final String value, final HttpServletResponse response) throws Exception {
 
         if (name == null) {
             throw new NullPointerException("The name parameter must not be null.");

@@ -63,7 +63,7 @@ public abstract class AbsBaseResource extends ServerResource {
     }
 
 
-    protected String getFile(String path) throws IOException {
+    protected String getFile(final String path) throws IOException {
 
         final Reader reader = new InputStreamReader(AbsBaseResource.class.getResourceAsStream(path));
 

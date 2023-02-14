@@ -76,7 +76,7 @@ public class OAuthResource extends AbsBaseResource {
     @Status (403)
     public class NotspecifiedDomainError extends Exception {
 
-        public NotspecifiedDomainError(String message) {
+        public NotspecifiedDomainError(final String message) {
 
             super(message);
         }
