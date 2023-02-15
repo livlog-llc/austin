@@ -55,8 +55,10 @@ for(const c of cookiesArray){
     }
     eraseCookie(cArray[0].trim());
 }
-window.opener.postMessage(JSON.stringify(result), "*");
-window.close();
+if (window.opener) {
+    window.opener.postMessage(JSON.stringify(result), "*");
+    window.close();
+}
 </script>
 <p>認証が完了しました。</p>
 <p>こちらの画面を閉じてアプリにお戻りください。</p>

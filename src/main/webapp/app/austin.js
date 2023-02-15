@@ -7,7 +7,8 @@ class Austin {
 
     popup(provider, action) {
         
-        const url = Austin.austinURL + "/austin/oauth/" + provider + "/" + Austin.appKey + "?key=" + this.generateUuid();
+        Austin.uuid = this.generateUuid();
+        const url = Austin.austinURL + "/austin/oauth/" + provider + "/" + Austin.appKey + "?key=" + Austin.uuid;
 
         // 返りのアクションを設定
         addEventListener('message', function(event) {
@@ -19,17 +20,16 @@ class Austin {
             action(JSON.parse(event.data));
         }, false);
         // 子画面をオープン
-        const openWindow = window.open(
+        window.open(
             url,
             "austin",
             "width=1200, height=600, personalbar=0, toolbar=0, scrollbars=1, resizable=!"
         );
-        openWindow.addEventListener('load',function(event){
-            console.log('opne');
-            openWindow.addEventListener('unload',function(event){
-                console.log('close');
-            }, false);
-        }, false);
+    }
+    
+    get() {
+        
+        console.log(Austin.uuid);
     }
     
     generateUuid() {

@@ -26,6 +26,8 @@
       <div id="main">
         <div class="inner">
           <div><button id="openBtn">ボタン</button></div>
+          <div style="height: 10px;"></div>
+          <div><button id="getBtn">取得</button></div>
         </div>  <!-- /.inner -->
       </div>  <!-- /#main -->
       <!-- ▲ main ▲ -->
@@ -39,11 +41,14 @@
 
     <script>
       $(function(){
+        const austin = new Austin("http://localhost:8080", "cv6ape9usBe7");
         $('#openBtn').click(function(event) {
-          const austin = new Austin("http://localhost:8080", "cv6ape9usBe7");
           austin.popup("twitter", function(data) {
             console.log(data);
           });
+        });
+        $('#getBtn').click(function(event) {
+          austin.get();
         });
       });
     </script>

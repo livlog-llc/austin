@@ -26,7 +26,7 @@ public class OAuthResource extends AbsBaseResource {
             final var restletRequest = this.getRequest();
             final var servletRequest = ServletUtils.getRequest(restletRequest);
             final var restletResponse = this.getResponse();
-            final var servletResponse = ServletUtils.getResponse(restletResponse);
+            // final var servletResponse = ServletUtils.getResponse(restletResponse);
             restletResponse.setAccessControlAllowOrigin("*");
             final var referer = servletRequest.getHeader("REFERER");
             var domainFlg = true;
@@ -66,13 +66,7 @@ public class OAuthResource extends AbsBaseResource {
 
             OAuthResource.log.info(uriReference);
 
-            this.cookieScope("austin-uri-reference", uriReference, servletResponse);
-
-            var callbackURL = servletRequest.getRequestURL().toString();
-            final var index = callbackURL.indexOf("oauth");
-            callbackURL = callbackURL.substring(0, index) + "app/open.html";
-
-            final var newRef = new Reference(callbackURL);
+            final var newRef = new Reference(uriReference);
             this.redirectSeeOther(newRef);
             return new EmptyRepresentation();
         } catch (final Exception e) {
