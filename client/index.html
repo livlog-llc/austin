@@ -47,8 +47,12 @@
             console.log(data);
           });
         });
-        $('#getBtn').click(function(event) {
-          austin.get();
+        $('#getBtn').click(async function(event) {
+          const data = await austin.get();
+          const result = JSON.parse(data.result.value);
+          console.log(result);
+          const other = JSON.parse(atob(result.other));
+          console.log(other);
         });
       });
     </script>

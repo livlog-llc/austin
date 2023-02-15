@@ -27,18 +27,18 @@ public class TemporaryRepository extends Repository <TemporaryModel> {
      * @param regionResourcesId String
      * @return RegionResourcesModel
      */
-    public TemporaryModel findById(final String regionResourcesId) {
+    public TemporaryModel findById(final String key) {
 
         // SQL
         final var queryText = new StringBuilder();
-        queryText.append("select ");
+        queryText.append("SELECT ");
         queryText.append("   * ");
-        queryText.append("from region_resources ");
-        queryText.append("where REGION_RESOURCES_ID = :regionResourcesId ");
+        queryText.append("FROM temporary ");
+        queryText.append("WHERE KEY=:key ");
 
         final var query = this.getConnection().createQuery(queryText.toString())
                 .setAutoDeriveColumnNames(true)
-                .addParameter("regionResourcesId", regionResourcesId);
+                .addParameter("key", key);
 
         // 実行
         final var model = query.executeAndFetchFirst(TemporaryModel.class);

@@ -7,6 +7,7 @@ import org.restlet.routing.Router;
 
 import jp.livlog.austin.resource.CallbackResource;
 import jp.livlog.austin.resource.OAuthResource;
+import jp.livlog.austin.resource.ResultResource;
 
 /**
  * アプリケーションクラス.
@@ -29,6 +30,7 @@ public class AustinApplication extends Application {
         router.attach("/app", dir);
         router.attach("/oauth/{provider}/{app_key}", OAuthResource.class);
         router.attach("/callback/{provider}/{app_key}", CallbackResource.class);
+        router.attach("/result/{uuid}", ResultResource.class);
 
         return router;
     }

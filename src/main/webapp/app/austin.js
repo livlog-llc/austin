@@ -1,3 +1,5 @@
+
+
 class Austin {
 
     constructor(austinURL, appKey) {
@@ -26,12 +28,14 @@ class Austin {
             "width=1200, height=600, personalbar=0, toolbar=0, scrollbars=1, resizable=!"
         );
     }
-    
-    get() {
-        
-        console.log(Austin.uuid);
+
+    async get() {
+        const url = Austin.austinURL + "/austin/result/" + Austin.uuid;
+        const response = await fetch(url);
+        const data = await response.json();
+        return data;
     }
-    
+
     generateUuid() {
         // https://github.com/GoogleChrome/chrome-platform-analytics/blob/master/src/internal/identifier.js
         // const FORMAT: string = "xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx";
