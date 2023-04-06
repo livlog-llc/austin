@@ -57,8 +57,8 @@ for(const c of cookiesArray){
 }
 if (window.opener) {
     window.opener.postMessage(JSON.stringify(result), "*");
+    window.close();
 }
-window.close();
 </script>
 <p>認証が完了しました。</p>
 <p>こちらの画面を閉じてアプリにお戻りください。</p>
