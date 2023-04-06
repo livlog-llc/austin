@@ -15,7 +15,7 @@ class Austin {
         // 返りのアクションを設定
         addEventListener('message', function(event) {
             // 受け取ってからの処理
-            // 送られてきたのが確実に「c-brains.co.jp」からである事を確認
+            // 送られてきたのが確実に「xxxxx.xxxx.com」からである事を確認
             if (event.origin != Austin.austinURL) {
               return;
             }
