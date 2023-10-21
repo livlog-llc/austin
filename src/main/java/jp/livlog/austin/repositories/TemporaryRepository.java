@@ -5,7 +5,7 @@ import org.sql2o.Connection;
 import jp.livlog.austin.model.TemporaryModel;
 
 /**
- * 地域資源リポジトリ.
+ * 一時保存リポジトリ.
  *
  * @author H.Aoshima
  * @version 1.0
