@@ -60,6 +60,9 @@ public class OAuthResource extends AbsBaseResource {
                 case SLACK:
                     uriReference = this.slackService.auth(setting, appKey, servletRequest);
                     break;
+                case DISCORD:
+                    uriReference = this.discordService.auth(setting, appKey, servletRequest);
+                    break;
                 default:
                     break;
             }

@@ -51,6 +51,9 @@ public class CallbackResource extends AbsBaseResource {
                     case SLACK:
                         result = this.slackService.callback(setting, appKey, servletRequest);
                         break;
+                    case DISCORD:
+                        result = this.discordService.callback(setting, appKey, servletRequest);
+                        break;
                     default:
                         break;
                 }
