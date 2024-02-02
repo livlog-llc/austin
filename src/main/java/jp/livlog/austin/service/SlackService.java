@@ -5,6 +5,7 @@ import java.util.UUID;
 import javax.servlet.http.HttpServletRequest;
 
 import com.github.scribejava.apis.SlackApi;
+import com.github.scribejava.core.base64.Base64;
 import com.github.scribejava.core.builder.ServiceBuilder;
 import com.github.scribejava.core.oauth.OAuth20Service;
 
@@ -114,7 +115,7 @@ public class SlackService implements InfBaseService {
         SlackService.log.info(rawResponse);
         // result.setId(String.valueOf(id));
         result.setOauthToken(oauthToken);
-        // result.setOther(Base64.encode(rawResponse.getBytes()));
+        result.setOther(Base64.encode(rawResponse.getBytes()));
 
         return result;
     }
