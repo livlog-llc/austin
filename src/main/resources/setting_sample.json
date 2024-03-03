@@ -58,6 +58,15 @@
       "client_secret": "<-client_secret->",
       "scope": "identify",
       "apiVersion": ""
+    },
+    {
+      "app_name": "<-app_name->",
+      "app_key": "<-app_key->",
+      "provider_name": "google",
+      "client_id": "-client_id->",
+      "client_secret": "<-client_secret->",
+      "scope": "openid",
+      "apiVersion": ""
     }
   ]
 }
