@@ -54,6 +54,9 @@ public class CallbackResource extends AbsBaseResource {
                     case DISCORD:
                         result = this.discordService.callback(setting, appKey, servletRequest);
                         break;
+                    case GOOGLE:
+                        result = this.googleService.callback(setting, appKey, servletRequest);
+                        break;
                     default:
                         break;
                 }

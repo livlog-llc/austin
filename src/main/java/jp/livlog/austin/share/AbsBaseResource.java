@@ -16,6 +16,7 @@ import com.google.gson.Gson;
 import jp.livlog.austin.data.Setting;
 import jp.livlog.austin.service.DiscordService;
 import jp.livlog.austin.service.FacebookService;
+import jp.livlog.austin.service.GoogleService;
 import jp.livlog.austin.service.LineService;
 import jp.livlog.austin.service.SlackService;
 import jp.livlog.austin.service.TrelloService;
@@ -47,8 +48,11 @@ public abstract class AbsBaseResource extends ServerResource {
     /** SlackService. */
     protected final SlackService    slackService               = SlackService.getInstance();
 
-    /** SlackService. */
+    /** DiscordService. */
     protected final DiscordService  discordService             = DiscordService.getInstance();
+
+    /** GoogleService. */
+    protected final GoogleService   googleService              = GoogleService.getInstance();
 
     protected Setting getSetting() throws IOException {
 

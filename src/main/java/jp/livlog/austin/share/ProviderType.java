@@ -18,8 +18,10 @@ public enum ProviderType {
     TRELLO(4, "trello"),
     /** Slack. */
     SLACK(5, "slack"),
-    /** Slack. */
+    /** Discord. */
     DISCORD(6, "discord"),
+    /** Google. */
+    GOOGLE(7, "google"),
     ;
 
     /** cd. */

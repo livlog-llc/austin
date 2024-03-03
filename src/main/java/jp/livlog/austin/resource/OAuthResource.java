@@ -63,6 +63,9 @@ public class OAuthResource extends AbsBaseResource {
                 case DISCORD:
                     uriReference = this.discordService.auth(setting, appKey, servletRequest);
                     break;
+                case GOOGLE:
+                    uriReference = this.googleService.auth(setting, appKey, servletRequest);
+                    break;
                 default:
                     break;
             }
