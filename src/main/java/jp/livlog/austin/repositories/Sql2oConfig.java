@@ -1,10 +1,9 @@
 package jp.livlog.austin.repositories;
 
-import javax.servlet.ServletContext;
-
 import org.apache.commons.dbcp.BasicDataSource;
 import org.sql2o.Sql2o;
 
+import jakarta.servlet.ServletContext;
 import lombok.Getter;
 
 /**

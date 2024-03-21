@@ -1,11 +1,10 @@
 package jp.livlog.austin.service;
 
-import javax.servlet.http.HttpServletRequest;
-
 import com.github.scribejava.apis.DiscordApi;
 import com.github.scribejava.core.builder.ServiceBuilder;
 import com.github.scribejava.core.oauth.OAuth20Service;
 
+import jakarta.servlet.http.HttpServletRequest;
 import jp.livlog.austin.data.Provider;
 import jp.livlog.austin.data.Result;
 import jp.livlog.austin.data.Setting;

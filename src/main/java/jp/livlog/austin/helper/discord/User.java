@@ -1,10 +1,9 @@
 package jp.livlog.austin.helper.discord;
 
-import javax.annotation.Generated;
-
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
+import jakarta.annotation.Generated;
 import lombok.Data;
 
 @Generated ("jsonschema2pojo")

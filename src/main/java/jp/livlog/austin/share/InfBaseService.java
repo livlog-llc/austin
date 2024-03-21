@@ -1,7 +1,6 @@
 package jp.livlog.austin.share;
 
-import javax.servlet.http.HttpServletRequest;
-
+import jakarta.servlet.http.HttpServletRequest;
 import jp.livlog.austin.data.Result;
 import jp.livlog.austin.data.Setting;
 
