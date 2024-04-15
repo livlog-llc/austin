@@ -3,8 +3,6 @@ package jp.livlog.austin.service;
 import java.util.HashMap;
 import java.util.Map;
 
-import javax.servlet.http.HttpServletRequest;
-
 import org.json.JSONObject;
 
 import com.github.scribejava.apis.GoogleApi20;
@@ -13,6 +11,7 @@ import com.github.scribejava.core.model.OAuthRequest;
 import com.github.scribejava.core.model.Verb;
 import com.github.scribejava.core.oauth.OAuth20Service;
 
+import jakarta.servlet.http.HttpServletRequest;
 import jp.livlog.austin.data.Provider;
 import jp.livlog.austin.data.Result;
 import jp.livlog.austin.data.Setting;

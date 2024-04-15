@@ -1,7 +1,5 @@
 package jp.livlog.austin.service;
 
-import javax.servlet.http.HttpServletRequest;
-
 import com.github.scribejava.apis.FacebookApi;
 import com.github.scribejava.core.builder.ServiceBuilder;
 import com.github.scribejava.core.oauth.OAuth20Service;
@@ -9,6 +7,7 @@ import com.restfb.DefaultFacebookClient;
 import com.restfb.Version;
 import com.restfb.types.User;
 
+import jakarta.servlet.http.HttpServletRequest;
 import jp.livlog.austin.data.Provider;
 import jp.livlog.austin.data.Result;
 import jp.livlog.austin.data.Setting;
@@ -40,7 +39,7 @@ public class FacebookService implements InfBaseService {
 
 
     @Override
-    public String auth(Setting setting, String appKey, HttpServletRequest request) throws Exception {
+    public String auth(final Setting setting, final String appKey, final HttpServletRequest request) throws Exception {
 
         Provider facebookProvider = null;
         for (final Provider provider : setting.getProviders()) {
@@ -68,7 +67,7 @@ public class FacebookService implements InfBaseService {
 
 
     @Override
-    public String getCallback(String appKey, HttpServletRequest request) {
+    public String getCallback(final String appKey, final HttpServletRequest request) {
 
         var callbackURL = request.getRequestURL().toString();
         callbackURL = callbackURL.replace("oauth", "callback");
@@ -78,7 +77,7 @@ public class FacebookService implements InfBaseService {
 
 
     @Override
-    public Result callback(Setting setting, String appKey, HttpServletRequest request) throws Exception {
+    public Result callback(final Setting setting, final String appKey, final HttpServletRequest request) throws Exception {
 
         final var result = new Result();
 

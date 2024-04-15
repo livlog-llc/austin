@@ -4,15 +4,14 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.Reader;
 
-import javax.servlet.ServletContext;
-import javax.servlet.http.Cookie;
-import javax.servlet.http.HttpServletResponse;
-
 import org.apache.commons.io.IOUtils;
 import org.restlet.resource.ServerResource;
 
 import com.google.gson.Gson;
 
+import jakarta.servlet.ServletContext;
+import jakarta.servlet.http.Cookie;
+import jakarta.servlet.http.HttpServletResponse;
 import jp.livlog.austin.data.Setting;
 import jp.livlog.austin.service.DiscordService;
 import jp.livlog.austin.service.FacebookService;

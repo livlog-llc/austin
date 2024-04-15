@@ -1,7 +1,6 @@
 package jp.livlog.austin.service;
 
-import javax.servlet.http.HttpServletRequest;
-
+import jakarta.servlet.http.HttpServletRequest;
 import jp.livlog.austin.data.Provider;
 import jp.livlog.austin.data.Result;
 import jp.livlog.austin.data.Setting;
@@ -34,7 +33,7 @@ public class TrelloService implements InfBaseService {
 
 
     @Override
-    public String auth(Setting setting, String appKey, HttpServletRequest request) throws Exception {
+    public String auth(final Setting setting, final String appKey, final HttpServletRequest request) throws Exception {
 
         Provider trelloProvider = null;
         for (final Provider provider : setting.getProviders()) {
@@ -56,7 +55,7 @@ public class TrelloService implements InfBaseService {
         parameters.addParameter("key", trelloProvider.getClientId());
         parameters.addParameter("return_url", this.getCallback(appKey, request));
 
-        final var url = new StringBuffer("https://trello.com/1/authorize");
+        final var url = new StringBuilder("https://trello.com/1/authorize");
         url.append(parameters.toString());
 
         TrelloService.log.info(url.toString());
@@ -66,7 +65,7 @@ public class TrelloService implements InfBaseService {
 
 
     @Override
-    public String getCallback(String appKey, HttpServletRequest request) {
+    public String getCallback(final String appKey, final HttpServletRequest request) {
 
         var callbackURL = request.getRequestURL().toString();
         callbackURL = callbackURL.replace("oauth", "callback");
@@ -79,7 +78,7 @@ public class TrelloService implements InfBaseService {
 
 
     @Override
-    public Result callback(Setting setting, String appKey, HttpServletRequest request) throws Exception {
+    public Result callback(final Setting setting, final String appKey, final HttpServletRequest request) throws Exception {
 
         final var result = new Result();
 

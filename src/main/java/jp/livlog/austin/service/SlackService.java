@@ -2,13 +2,12 @@ package jp.livlog.austin.service;
 
 import java.util.UUID;
 
-import javax.servlet.http.HttpServletRequest;
-
 import com.github.scribejava.apis.SlackApi;
 import com.github.scribejava.core.base64.Base64;
 import com.github.scribejava.core.builder.ServiceBuilder;
 import com.github.scribejava.core.oauth.OAuth20Service;
 
+import jakarta.servlet.http.HttpServletRequest;
 import jp.livlog.austin.data.Provider;
 import jp.livlog.austin.data.Result;
 import jp.livlog.austin.data.Setting;

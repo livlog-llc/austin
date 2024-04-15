@@ -7,8 +7,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 
-import javax.servlet.http.HttpServletRequest;
-
 import org.apache.http.HttpResponse;
 import org.apache.http.NameValuePair;
 import org.apache.http.client.entity.UrlEncodedFormEntity;
@@ -18,6 +16,7 @@ import org.apache.http.message.BasicNameValuePair;
 
 import com.google.gson.Gson;
 
+import jakarta.servlet.http.HttpServletRequest;
 import jp.livlog.austin.data.Provider;
 import jp.livlog.austin.data.Result;
 import jp.livlog.austin.data.Setting;
@@ -52,7 +51,7 @@ public class LineService implements InfBaseService {
 
     // https://developers.line.biz/ja/docs/line-login/integrate-line-login/#making-an-authorization-request
     @Override
-    public String auth(Setting setting, String appKey, HttpServletRequest request) throws Exception {
+    public String auth(final Setting setting, final String appKey, final HttpServletRequest request) throws Exception {
 
         Provider lineProvider = null;
         for (final Provider provider : setting.getProviders()) {
@@ -76,7 +75,7 @@ public class LineService implements InfBaseService {
         parameters.addParameter("state", state);
         parameters.addParameter("scope", lineProvider.getScope());
 
-        final var url = new StringBuffer("https://access.line.me/oauth2/v2.1/authorize");
+        final var url = new StringBuilder("https://access.line.me/oauth2/v2.1/authorize");
         url.append(parameters.toString());
 
         LineService.log.info(url.toString());
@@ -86,7 +85,7 @@ public class LineService implements InfBaseService {
 
 
     @Override
-    public String getCallback(String appKey, HttpServletRequest request) {
+    public String getCallback(final String appKey, final HttpServletRequest request) {
 
         var callbackURL = request.getRequestURL().toString();
         callbackURL = callbackURL.replace("oauth", "callback");
@@ -99,7 +98,7 @@ public class LineService implements InfBaseService {
 
 
     @Override
-    public Result callback(Setting setting, String appKey, HttpServletRequest request) throws Exception {
+    public Result callback(final Setting setting, final String appKey, final HttpServletRequest request) throws Exception {
 
         final var result = new Result();
 
