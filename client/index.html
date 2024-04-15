@@ -1,61 +1,34 @@
 <!DOCTYPE html>
-<html lang="ja">
-  <head>
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0" /> <!-- ビューポートの設定 -->
-    <!-- ▼ CSS ▼ -->
-    <link rel="stylesheet" href="./files/reset.css" />    <!-- リセット用 CSS -->
-    <link rel="stylesheet" href="./files/common.css" />   <!-- サイト内共通 CSS -->
-    <style>
-      #container {
-        text-align: center;
-      }
-
-      .inner {
-        max-width: 940px; /* 960px - padding */
-        padding: 10px;
-        margin: 0 auto;
-      }
-    </style>
-    <!-- ▲ CSS ▲ -->
-  </head>
-  <body>
-
-    <!-- ▼ container ▼ -->
-    <div id="container">
-      <!-- ▼ main ▼ -->
-      <div id="main">
-        <div class="inner">
-          <div><button id="openBtn">ボタン</button></div>
-          <div style="height: 10px;"></div>
-          <div><button id="getBtn">取得</button></div>
-        </div>  <!-- /.inner -->
-      </div>  <!-- /#main -->
-      <!-- ▲ main ▲ -->
-    </div>  <!-- /#container -->
-    <!-- ▲ container ▲ -->
-
-    <!-- ▼ jQuery ▼ -->
-    <script src="./files/jquery-1.12.4.min.js"></script>  <!-- jQuery 本体 -->
-    <script src="./files/common.js"></script>             <!-- サイト内共通 js -->
-    <script src="http://localhost:8080/austin/app/austin.js"></script>           
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Austin API Example</title>
+    <script src="http://localhost:8080/austin/app/austin.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+</head>
+<body>
+    <button id="openBtn">Open Popup</button>
+    <button id="getBtn">Get Data</button>
 
     <script>
-      $(function(){
-        const austin = new Austin("http://localhost:8080", "fmHMLVKWPi6r");
-        $('#openBtn').click(function(event) {
-          austin.popup("google", function(data) {
-            console.log(data);
-          });
+        $(function() {
+            const austin = new Austin("http://localhost:8080", "fmHMLVKWPi6r");
+
+            $('#openBtn').click(function() {
+                austin.popup("google", function(data) {
+                    console.log(data);
+                });
+            });
+
+            $('#getBtn').click(async function() {
+                const data = await austin.get();
+                const result = JSON.parse(data.result.value);
+                console.log(result);
+                const other = JSON.parse(atob(result.other));
+                console.log(other);
+            });
         });
-        $('#getBtn').click(async function(event) {
-          const data = await austin.get();
-          const result = JSON.parse(data.result.value);
-          console.log(result);
-          const other = JSON.parse(atob(result.other));
-          console.log(other);
-        });
-      });
     </script>
-    <!-- ▲ jQuery ▲ -->
-  </body>
+</body>
 </html>
