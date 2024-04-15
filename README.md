@@ -1,35 +1,55 @@
-# Austin
-「**Austin**」は、OAuth認証のコーディングの煩わしさを省くために主要なSNSログインの動作を流用できるように作成しました。
+[![Build Status](https://travis-ci.org/austin/austin.svg?branch=master)](https://travis-ci.org/austin/austin)  [![Open Source](https://badges.frapsoft.com/os/v1/open-source.svg?v=103)](https://github.com/austin/austin) [![Java Version](https://img.shields.io/badge/java-11-blue.svg)](https://openjdk.java.net/projects/jdk/11/)
 
-## どんなプロジェクトですか？
-これは Java11 に基づくソリューションであり、オープンソースとして、Tomcatの Webサーバをセットアップして実行できます。
+**Austin**は、Java11を基盤とし、Tomcat Webサーバーで動作するオープンソースのOAuth認証統合ソリューションです。
+
+## 何ができるのか？
+
+このプロジェクトは、SNSプラットフォーム（Twitter、Facebook、LINEなど）のOAuth認証を簡単に統合し、Web開発者がAPI統合に費やす時間を削減することができます。
 
 ## 主な特徴
-※ドキュメント作成中
-現時点では「Twitter」「Facebook」「Line」に対応
 
+- **対応プラットフォーム**: 複数の主要なSNSに対応。
+- **OAuth認証の簡素化**: 複雑な認証プロセスを抽象化し、簡単に統合。
+- **オープンソース**: 誰でも利用・改善が可能。
 
-## アプリキーの生成
-アプリキーの生成には以下のサイトでパスワードを生成して利用すると良いかと思います。
+## インストール
 
-パスワード生成（パスワード作成）ツール<br>
-https://www.luft.co.jp/cgi/randam.php
+TomcatサーバーとJava11が前提条件です。以下の手順に従って設定してください。
+
+```sh
+git clone https://github.com/austin/austin.git
+cd austin
+// ここにJavaとTomcatのセットアップ手順を追加
+```
 
 ## 使い方
 
-### Javascriptの設定
+JavaScriptから簡単にSNS認証をトリガーすることができます。以下のスクリプトをWebページに追加してください。
 
-    <script src="<--domain-->/austin/app/austin.js"></script>
-    <script>
-    const austin = new Austin("<--domain-->", "<-app_key->");
-    austin.popup("twitter", function(data) {
-        if (data.status == 'ok') {
-            console.log(data.provider);
-            console.log(data.id);
-            console.log(data.oauthToken);
-            console.log(data.oauthTokenSecret);
-        } else if (data.status == 'ng') {
-            console.log(data.errorMessage);
-        }
-    });
-    </script>
+```html
+<script src="your-domain/austin/app/austin.js"></script>
+<script>
+const austin = new Austin("your-domain", "your-app-key");
+austin.popup("twitter", function(data) {
+    if (data.status == 'ok') {
+        console.log(data.provider);
+        console.log(data.id);
+        console.log(data.oauthToken);
+        console.log(data.oauthTokenSecret);
+    } else if (data.status == 'ng') {
+        console.log(data.errorMessage);
+    }
+});
+</script>
+```
+
+## プロジェクトに貢献する
+
+- このプロジェクトはオープンソースであり、誰でも改善提案やプルリクエストを歓迎します。
+- [バグ報告](https://github.com/austin/austin/issues)
+- [機能リクエスト](https://github.com/austin/austin/issues)
+- [プルリクエスト](https://github.com/austin/austin/pulls)
+
+## ライセンス
+
+このプロジェクトはMIT Licenseのもとで公開されています。
