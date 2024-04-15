@@ -14,7 +14,7 @@
 
 ## インストール
 
-TomcatサーバーとJava11が前提条件です。以下の手順に従って設定してください。
+Tomcat10サーバーとJava17が前提条件です。以下の手順に従って設定してください。
 
 ```sh
 git clone https://github.com/austin/austin.git
