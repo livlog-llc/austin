@@ -31,8 +31,6 @@ public class Sql2oConfig {
         this.dataSource = new BasicDataSource();
         this.dataSource.setDriverClassName("org.sqlite.JDBC");
         this.dataSource.setUrl("jdbc:sqlite:" + dbname);
-        this.dataSource.setUsername("root");
-        this.dataSource.setPassword("root");
         this.sql2o = new Sql2o(this.dataSource);
     }
 
