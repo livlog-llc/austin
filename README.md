@@ -14,13 +14,27 @@
 
 ## インストール
 
-Tomcat10サーバーとJava17が前提条件です。以下の手順に従って設定してください。
+### 必要条件
+- Java 17がインストールされていること
+- Maven 3.6.3以上がインストールされていること
 
-```sh
-git clone https://github.com/austin/austin.git
-cd austin
-// ここにJavaとTomcatのセットアップ手順を追加
-```
+### インストール手順
+
+1. **プロジェクトのクローン**
+   ```sh
+   git clone https://github.com/austin/austin.git
+   cd austin
+   ```
+
+2. **Mavenを使用した依存関係の解決とビルド**
+   ```sh
+   mvn clean install
+   ```
+
+   このコマンドは、`pom.xml` に定義された依存関係を解決し、プロジェクトをビルドします。このプロセスは、必要なライブラリをダウンロードし、アプリケーションの実行可能なWARファイルを生成します。
+
+3. **WARファイルのデプロイ**
+   生成された `austin.war` ファイルをTomcatまたは任意のJava対応Webサーバーにデプロイします。
 
 ## 使い方
 
