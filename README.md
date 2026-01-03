@@ -135,6 +135,15 @@ austin.popup("twitter", function(data) {
 </script>
 ```
 
+## サーバサイド実装を行いたい場合
+
+Austinはクライアントサイドでの利用が前提ですが、`implementation=server` をクエリパラメータに追加することで、リファラーチェックをスキップしてサーバサイドのリクエストからもOAuthフローを開始・結果取得できます。
+
+- 認証開始: `https://your-domain/austin/oauth/{provider}/{app_key}?implementation=server&key={uuid}`
+- 結果取得: `https://your-domain/austin/result/{uuid}?implementation=server`
+
+アプリケーション側で適切な認可やCSRF対策を行った上で利用してください。
+
 ## プロジェクトに貢献する
 
 - このプロジェクトはオープンソースであり、誰でも改善提案やプルリクエストを歓迎します。

@@ -5,7 +5,9 @@ import java.io.InputStreamReader;
 import java.io.Reader;
 
 import org.apache.commons.io.IOUtils;
+import org.restlet.data.Parameter;
 import org.restlet.resource.ServerResource;
+import org.restlet.util.Series;
 
 import com.google.gson.Gson;
 
@@ -52,6 +54,23 @@ public abstract class AbsBaseResource extends ServerResource {
 
     /** GoogleService. */
     protected final GoogleService   googleService              = GoogleService.getInstance();
+
+    /**
+     * サーバサイドからの呼び出しか判定する.
+     *
+     * @param queryParameters クエリパラメータ
+     * @return サーバサイドからの呼び出しの場合はtrue
+     */
+    protected boolean isServerSideRequest(final Series <Parameter> queryParameters) {
+
+        if (queryParameters == null) {
+            return false;
+        }
+
+        final var impl = queryParameters.getFirstValue("implementation", true, "");
+
+        return "server".equalsIgnoreCase(impl);
+    }
 
     protected Setting getSetting() throws IOException {
 
