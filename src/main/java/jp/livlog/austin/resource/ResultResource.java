@@ -39,6 +39,7 @@ public class ResultResource extends AbsBaseResource {
                 for (final String domain : setting.getDomains()) {
                     if (refererValue.contains(domain)) {
                         domainFlg = false;
+                        break;
                     }
                 }
                 if (domainFlg) {
@@ -73,7 +74,7 @@ public class ResultResource extends AbsBaseResource {
     }
 
     @Status (403)
-    public class NotspecifiedDomainError extends Exception {
+    public static class NotspecifiedDomainError extends Exception {
 
         public NotspecifiedDomainError(final String message) {
 

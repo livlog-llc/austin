@@ -11,6 +11,8 @@ import jp.livlog.austin.share.AbsBaseResource;
 import jp.livlog.austin.share.ProviderType;
 import lombok.extern.slf4j.Slf4j;
 
+import java.util.Objects;
+
 /**
  * Resource which has only one representation.
  */
@@ -35,7 +37,7 @@ public class CallbackResource extends AbsBaseResource {
 
             try {
                 Result result = null;
-                switch (ProviderType.getType(provider)) {
+                switch (Objects.requireNonNull(ProviderType.getType(provider))) {
                     case TWITTER:
                         result = this.twitterService.callback(setting, appKey, servletRequest);
                         break;

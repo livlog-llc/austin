@@ -11,6 +11,8 @@ import jp.livlog.austin.share.AbsBaseResource;
 import jp.livlog.austin.share.ProviderType;
 import lombok.extern.slf4j.Slf4j;
 
+import java.util.Objects;
+
 /**
  * Resource which has only one representation.
  */
@@ -36,6 +38,7 @@ public class OAuthResource extends AbsBaseResource {
                 for (final String domain : setting.getDomains()) {
                     if (refererValue.contains(domain)) {
                         domainFlg = false;
+                        break;
                     }
                 }
                 if (domainFlg) {
@@ -48,7 +51,7 @@ public class OAuthResource extends AbsBaseResource {
             final var appKey = (String) attrMap.get("app_key");
 
             String uriReference = null;
-            switch (ProviderType.getType(provider)) {
+            switch (Objects.requireNonNull(ProviderType.getType(provider))) {
                 case TWITTER:
                     uriReference = this.twitterService.auth(setting, appKey, servletRequest);
                     break;
@@ -87,7 +90,7 @@ public class OAuthResource extends AbsBaseResource {
     }
 
     @Status (403)
-    public class NotspecifiedDomainError extends Exception {
+    public static class NotspecifiedDomainError extends Exception {
 
         public NotspecifiedDomainError(final String message) {
 
