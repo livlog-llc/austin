@@ -22,11 +22,13 @@
     </repositories>
     <properties>
         <java.version>17</java.version>
-        <restlet.version>2.4.3</restlet.version>
+        <restlet.version>2.6.0</restlet.version>
         <maven.compiler.version>3.12.1</maven.compiler.version>
         <maven.war.version>3.4.0</maven.war.version>
         <servlet.api.version>6.0.0</servlet.api.version>
         <logback.version>1.5.3</logback.version>
+        <maven.compiler.release>17</maven.compiler.release>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     </properties>
     <dependencies>
         <dependency>
@@ -41,19 +43,19 @@
             <version>2.1.1</version>
         </dependency>
         <dependency>
-            <groupId>org.restlet.jee</groupId>
+            <groupId>org.restlet</groupId>
             <artifactId>org.restlet</artifactId>
             <version>${restlet.version}</version>
         </dependency>
         <dependency>
-            <groupId>org.restlet.jee</groupId>
+            <groupId>org.restlet</groupId>
             <artifactId>org.restlet.ext.json</artifactId>
             <version>${restlet.version}</version>
         </dependency>
         <dependency>
-            <groupId>com.github.livlog-llc</groupId>
-            <artifactId>restlet-servlet-jakarta</artifactId>
-            <version>2.4.3</version>
+            <groupId>org.restlet</groupId>
+            <artifactId>org.restlet.ext.servlet</artifactId>
+            <version>${restlet.version}</version>
         </dependency>
         <dependency>
             <groupId>org.projectlombok</groupId>
