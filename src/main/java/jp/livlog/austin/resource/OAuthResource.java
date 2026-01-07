@@ -33,16 +33,10 @@ public class OAuthResource extends AbsBaseResource {
             restletResponse.setAccessControlAllowOrigin("*");
             final var serverSideRequest = this.isServerSideRequest(restletRequest.getOriginalRef().getQueryAsForm());
             if (!serverSideRequest) {
+                final var origin = servletRequest.getHeader("ORIGIN");
                 final var referer = servletRequest.getHeader("REFERER");
                 final var refererValue = referer == null ? "" : referer;
-                var domainFlg = true;
-                for (final String domain : setting.getDomains()) {
-                    if (refererValue.contains(domain)) {
-                        domainFlg = false;
-                        break;
-                    }
-                }
-                if (domainFlg) {
+                if (!this.isAllowedRequestDomain(origin, refererValue, setting.getDomains())) {
                     throw new NotspecifiedDomainError("Not the specified domain.");
                 }
             }
