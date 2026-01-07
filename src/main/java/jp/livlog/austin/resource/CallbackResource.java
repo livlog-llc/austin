@@ -75,9 +75,13 @@ public class CallbackResource extends AbsBaseResource {
                 this.cookieScope("austin-error-message", "authentication_failure", servletResponse);
             }
 
-            var callbackURL = servletRequest.getRequestURL().toString();
-            final var index = callbackURL.indexOf("callback");
-            callbackURL = callbackURL.substring(0, index) + "app/close.html";
+            var callbackURL = (String) servletRequest.getSession().getAttribute("return_url");
+            if (callbackURL == null || callbackURL.isEmpty()) {
+                callbackURL = servletRequest.getRequestURL().toString();
+                final var index = callbackURL.indexOf("callback");
+                callbackURL = callbackURL.substring(0, index) + "app/close.html";
+            }
+            servletRequest.getSession().removeAttribute("return_url");
 
             final var newRef = new Reference(callbackURL);
             this.redirectSeeOther(newRef);
