@@ -3,6 +3,8 @@ package jp.livlog.austin.share;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.Reader;
+import java.net.URI;
+import java.util.List;
 
 import org.apache.commons.io.IOUtils;
 import org.restlet.data.Parameter;
@@ -101,6 +103,28 @@ public abstract class AbsBaseResource extends ServerResource {
         return IOUtils.toString(reader);
     }
 
+    protected boolean isAllowedRefererDomain(final String refererValue, final List <String> domains) {
+
+        if (refererValue == null || refererValue.isEmpty() || domains == null || domains.isEmpty()) {
+            return false;
+        }
+
+        try {
+            final var uri = URI.create(refererValue);
+            final var host = uri.getHost();
+            if (host == null) {
+                return false;
+            }
+            for (final String domain : domains) {
+                if (host.equalsIgnoreCase(domain)) {
+                    return true;
+                }
+            }
+            return false;
+        } catch (final IllegalArgumentException e) {
+            return false;
+        }
+    }
 
     /**
      * @param name CharSequence

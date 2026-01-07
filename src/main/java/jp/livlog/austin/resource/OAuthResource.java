@@ -35,14 +35,7 @@ public class OAuthResource extends AbsBaseResource {
             if (!serverSideRequest) {
                 final var referer = servletRequest.getHeader("REFERER");
                 final var refererValue = referer == null ? "" : referer;
-                var domainFlg = true;
-                for (final String domain : setting.getDomains()) {
-                    if (refererValue.contains(domain)) {
-                        domainFlg = false;
-                        break;
-                    }
-                }
-                if (domainFlg) {
+                if (!this.isAllowedRefererDomain(refererValue, setting.getDomains())) {
                     throw new NotspecifiedDomainError("Not the specified domain.");
                 }
             }
