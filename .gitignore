@@ -27,5 +27,4 @@ hs_err_pid*
 target/
 .factorypath
 src/main/resources/setting.json
-src/test/java/austin/OAuth20GetAccessToken.java
 .idea/
