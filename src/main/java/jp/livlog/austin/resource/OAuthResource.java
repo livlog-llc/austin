@@ -49,6 +49,10 @@ public class OAuthResource extends AbsBaseResource {
             final var attrMap = this.getRequestAttributes();
             final var provider = (String) attrMap.get("provider");
             final var appKey = (String) attrMap.get("app_key");
+            final var returnUrl = servletRequest.getParameter("return_url");
+            if (returnUrl != null && !returnUrl.isEmpty()) {
+                servletRequest.getSession().setAttribute("return_url", returnUrl);
+            }
 
             String uriReference = null;
             switch (Objects.requireNonNull(ProviderType.getType(provider))) {
