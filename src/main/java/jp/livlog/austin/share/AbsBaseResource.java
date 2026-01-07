@@ -103,14 +103,30 @@ public abstract class AbsBaseResource extends ServerResource {
         return IOUtils.toString(reader);
     }
 
-    protected boolean isAllowedRefererDomain(final String refererValue, final List <String> domains) {
+    protected boolean isAllowedRequestDomain(final String originValue, final String refererValue, final List <String> domains) {
 
-        if (refererValue == null || refererValue.isEmpty() || domains == null || domains.isEmpty()) {
+        if (domains == null || domains.isEmpty()) {
             return false;
         }
 
+        if (originValue != null && !originValue.isEmpty()) {
+            if (this.isAllowedDomainByUri(originValue, domains)) {
+                return true;
+            }
+            return false;
+        }
+
+        if (refererValue == null || refererValue.isEmpty()) {
+            return false;
+        }
+
+        return this.isAllowedDomainByUri(refererValue, domains);
+    }
+
+    private boolean isAllowedDomainByUri(final String uriValue, final List <String> domains) {
+
         try {
-            final var uri = URI.create(refererValue);
+            final var uri = URI.create(uriValue);
             final var host = uri.getHost();
             if (host == null) {
                 return false;
