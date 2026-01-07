@@ -47,14 +47,7 @@ public class OAuthResource extends AbsBaseResource {
             final var returnUrl = servletRequest.getParameter("return_url");
             if (returnUrl != null && !returnUrl.isEmpty()) {
                 try {
-                    final var parsedReturnUrl = URI.create(returnUrl);
-                    final var host = parsedReturnUrl.getHost();
-                    final var scheme = parsedReturnUrl.getScheme();
-                    if (host != null
-                            && ("http".equalsIgnoreCase(scheme) || "https".equalsIgnoreCase(scheme))
-                            && setting.getDomains().stream().anyMatch(host::contains)) {
-                        servletRequest.getSession().setAttribute("return_url", returnUrl);
-                    }
+                    servletRequest.getSession().setAttribute("return_url", returnUrl);
                 } catch (final IllegalArgumentException e) {
                     OAuthResource.log.warn("Invalid return_url provided: {}", returnUrl);
                 }
