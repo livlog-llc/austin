@@ -30,13 +30,14 @@ public class CallbackResource extends AbsBaseResource {
             final var restletResponse = this.getResponse();
             final var servletResponse = ServletUtils.getResponse(restletResponse);
             restletResponse.setAccessControlAllowOrigin("*");
+            final var serverSideRequest = this.isServerSideRequest(restletRequest.getOriginalRef().getQueryAsForm());
 
             final var attrMap = this.getRequestAttributes();
             final var provider = (String) attrMap.get("provider");
             final var appKey = (String) attrMap.get("app_key");
 
+            Result result = null;
             try {
-                Result result = null;
                 switch (Objects.requireNonNull(ProviderType.getType(provider))) {
                     case TWITTER:
                         result = this.twitterService.callback(setting, appKey, servletRequest);
@@ -63,16 +64,20 @@ public class CallbackResource extends AbsBaseResource {
                         break;
                 }
 
-                this.cookieScope("austin-status", "ok", servletResponse);
-                this.cookieScope("austin-provider", provider, servletResponse);
-                this.cookieScope("austin-id", result.getId(), servletResponse);
-                this.cookieScope("austin-oauth-token", result.getOauthToken(), servletResponse);
-                this.cookieScope("austin-oauth-token-secret", result.getOauthTokenSecret(), servletResponse);
-                this.cookieScope("austin-other", result.getOther(), servletResponse);
+                if (!serverSideRequest) {
+                    this.cookieScope("austin-status", "ok", servletResponse);
+                    this.cookieScope("austin-provider", provider, servletResponse);
+                    this.cookieScope("austin-id", result.getId(), servletResponse);
+                    this.cookieScope("austin-oauth-token", result.getOauthToken(), servletResponse);
+                    this.cookieScope("austin-oauth-token-secret", result.getOauthTokenSecret(), servletResponse);
+                    this.cookieScope("austin-other", result.getOther(), servletResponse);
+                }
             } catch (final Exception e) {
                 CallbackResource.log.error(e.getMessage(), e);
-                this.cookieScope("austin-status", "ng", servletResponse);
-                this.cookieScope("austin-error-message", "authentication_failure", servletResponse);
+                if (!serverSideRequest) {
+                    this.cookieScope("austin-status", "ng", servletResponse);
+                    this.cookieScope("austin-error-message", "authentication_failure", servletResponse);
+                }
             }
 
             var callbackURL = (String) servletRequest.getSession().getAttribute("return_url");
@@ -84,6 +89,19 @@ public class CallbackResource extends AbsBaseResource {
             servletRequest.getSession().removeAttribute("return_url");
 
             final var newRef = new Reference(callbackURL);
+            if (serverSideRequest) {
+                if (result != null) {
+                    newRef.addQueryParameter("austin-status", "ok");
+                    this.addQueryParameterIfPresent(newRef, "austin-provider", provider);
+                    this.addQueryParameterIfPresent(newRef, "austin-id", result.getId());
+                    this.addQueryParameterIfPresent(newRef, "austin-oauth-token", result.getOauthToken());
+                    this.addQueryParameterIfPresent(newRef, "austin-oauth-token-secret", result.getOauthTokenSecret());
+                    this.addQueryParameterIfPresent(newRef, "austin-other", result.getOther());
+                } else {
+                    newRef.addQueryParameter("austin-status", "ng");
+                    newRef.addQueryParameter("austin-error-message", "authentication_failure");
+                }
+            }
             this.redirectSeeOther(newRef);
             return new EmptyRepresentation();
         } catch (final Exception e) {
@@ -93,4 +111,11 @@ public class CallbackResource extends AbsBaseResource {
 
     }
 
+    private void addQueryParameterIfPresent(final Reference reference, final String key, final String value) {
+
+        if (value == null || value.isEmpty()) {
+            return;
+        }
+        reference.addQueryParameter(key, value);
+    }
 }
