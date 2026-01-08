@@ -37,6 +37,7 @@ public class CallbackResource extends AbsBaseResource {
             final var appKey = (String) attrMap.get("app_key");
 
             Result result = null;
+            boolean hasError = false;
             try {
                 switch (Objects.requireNonNull(ProviderType.getType(provider))) {
                     case TWITTER:
@@ -74,6 +75,7 @@ public class CallbackResource extends AbsBaseResource {
                 }
             } catch (final Exception e) {
                 CallbackResource.log.error(e.getMessage(), e);
+                hasError = true;
                 if (!serverSideRequest) {
                     this.cookieScope("austin-status", "ng", servletResponse);
                     this.cookieScope("austin-error-message", "authentication_failure", servletResponse);
@@ -89,16 +91,16 @@ public class CallbackResource extends AbsBaseResource {
             servletRequest.getSession().removeAttribute("return_url");
 
             final var newRef = new Reference(callbackURL);
-            if (serverSideRequest) {
-                if (result != null) {
-                    newRef.addQueryParameter("austin-status", "ok");
-                    this.addQueryParameterIfPresent(newRef, "austin-provider", provider);
-                    this.addQueryParameterIfPresent(newRef, "austin-id", result.getId());
-                    this.addQueryParameterIfPresent(newRef, "austin-oauth-token", result.getOauthToken());
-                    this.addQueryParameterIfPresent(newRef, "austin-oauth-token-secret", result.getOauthTokenSecret());
-                    this.addQueryParameterIfPresent(newRef, "austin-other", result.getOther());
-                } else {
-                    newRef.addQueryParameter("austin-status", "ng");
+            if (result != null) {
+                newRef.addQueryParameter("austin-status", "ok");
+                this.addQueryParameterIfPresent(newRef, "austin-provider", provider);
+                this.addQueryParameterIfPresent(newRef, "austin-id", result.getId());
+                this.addQueryParameterIfPresent(newRef, "austin-oauth-token", result.getOauthToken());
+                this.addQueryParameterIfPresent(newRef, "austin-oauth-token-secret", result.getOauthTokenSecret());
+                this.addQueryParameterIfPresent(newRef, "austin-other", result.getOther());
+            } else {
+                newRef.addQueryParameter("austin-status", "ng");
+                if (hasError) {
                     newRef.addQueryParameter("austin-error-message", "authentication_failure");
                 }
             }
