@@ -76,6 +76,9 @@ public class OAuthResource extends AbsBaseResource {
                 case GOOGLE:
                     uriReference = this.googleService.auth(setting, appKey, servletRequest);
                     break;
+                case GITHUB:
+                    uriReference = this.githubService.auth(setting, appKey, servletRequest);
+                    break;
                 default:
                     break;
             }
