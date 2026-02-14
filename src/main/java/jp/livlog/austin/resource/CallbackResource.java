@@ -61,6 +61,9 @@ public class CallbackResource extends AbsBaseResource {
                     case GOOGLE:
                         result = this.googleService.callback(setting, appKey, servletRequest);
                         break;
+                    case GITHUB:
+                        result = this.githubService.callback(setting, appKey, servletRequest);
+                        break;
                     default:
                         break;
                 }

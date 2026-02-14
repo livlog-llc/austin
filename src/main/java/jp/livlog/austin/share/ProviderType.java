@@ -22,6 +22,8 @@ public enum ProviderType {
     DISCORD(6, "discord"),
     /** Google. */
     GOOGLE(7, "google"),
+    /** GitHub. */
+    GITHUB(8, "github"),
     ;
 
     /** cd. */

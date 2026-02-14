@@ -67,6 +67,15 @@
       "client_secret": "<-client_secret->",
       "scope": "openid",
       "apiVersion": ""
+    },
+    {
+      "app_name": "<-app_name->",
+      "app_key": "<-app_key->",
+      "provider_name": "github",
+      "client_id": "-client_id->",
+      "client_secret": "<-client_secret->",
+      "scope": "read:user user:email",
+      "apiVersion": ""
     }
   ]
 }
