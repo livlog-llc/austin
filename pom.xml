@@ -120,7 +120,7 @@
         <dependency>
             <groupId>com.restfb</groupId>
             <artifactId>restfb</artifactId>
-            <version>2024.2.0</version>
+            <version>2025.15.0</version>
         </dependency>
         <dependency>
             <groupId>org.xerial</groupId>
