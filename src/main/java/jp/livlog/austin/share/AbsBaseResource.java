@@ -20,6 +20,7 @@ import jp.livlog.austin.data.Setting;
 import jp.livlog.austin.service.DiscordService;
 import jp.livlog.austin.service.FacebookService;
 import jp.livlog.austin.service.GoogleService;
+import jp.livlog.austin.service.GithubService;
 import jp.livlog.austin.service.LineService;
 import jp.livlog.austin.service.SlackService;
 import jp.livlog.austin.service.TrelloService;
@@ -56,6 +57,9 @@ public abstract class AbsBaseResource extends ServerResource {
 
     /** GoogleService. */
     protected final GoogleService   googleService              = GoogleService.getInstance();
+
+    /** GithubService. */
+    protected final GithubService   githubService              = GithubService.getInstance();
 
     /**
      * サーバサイドからの呼び出しか判定する.
